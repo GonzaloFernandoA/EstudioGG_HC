@@ -9,12 +9,16 @@ import com.estudioGG.hc.model.Cliente;
 import com.estudioGG.hc.model.Identifiable;
 import com.estudioGG.hc.repository.S3RepositoryImpl;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ClienteService<T extends Identifiable> {
-
+    
+        private static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
+    
     private final S3RepositoryImpl<Cliente> ClienteRepository;
     
     @Autowired
@@ -23,11 +27,13 @@ public class ClienteService<T extends Identifiable> {
     }
 
     public void guardar(Cliente cliente) {
+        logger.info(cliente.toJson());
         ClienteRepository.save(cliente.getId(), cliente);
     }
 
     public Cliente obtener(String id) {
-        return ClienteRepository.findByKey(id, Cliente.class);
+        Cliente cliente =  ClienteRepository.findByKey(id, Cliente.class);
+        return cliente;
     }
     
     public List<Cliente> obtenerTodos() {

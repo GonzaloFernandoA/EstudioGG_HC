@@ -39,5 +39,23 @@ public class Registro {
     public void setCodigoUbicacion(String codigoUbicacion) {
         this.codigoUbicacion = codigoUbicacion;
     }
+    
+        @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Registro registro = (Registro) obj;
+
+        if (!codigoParteCuerpo.equals(registro.codigoParteCuerpo)) return false;
+        return codigoUbicacion.equals(registro.codigoUbicacion);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = codigoParteCuerpo.hashCode();
+        result = 31 * result + codigoUbicacion.hashCode();
+        return result;
+    }
 }
 

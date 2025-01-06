@@ -79,8 +79,7 @@
 <body>
     <h1>Formulario de Demanda</h1>
     <form th:action="@{/demanda}" th:object="${demanda}" method="post">
-        <label for="codigo">Código:</label>
-        <input type="text" id="codigo" th:field="*{codigo}" required/>
+
 
         <label for="dni">DNI:</label>
         <input type="text" id="dni" th:field="*{dni}" required/>
@@ -111,5 +110,7 @@
           <a href="/">
             <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Home" class="home-icon" title="Volver a Inicio">
         </a>
+        <div th:if="${error}" class="alert alert-danger">
+    <p th:text="${error}"></p>
 </body>
 </html>

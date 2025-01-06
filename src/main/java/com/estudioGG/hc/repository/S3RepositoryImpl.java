@@ -44,13 +44,15 @@ public class S3RepositoryImpl<T extends Identifiable> {
     public void save(String key, T entity) {
 
         String folder = entity.getClass().getSimpleName() + "/";
-
+        String file = folder + entity.getId() + ".json"; 
         try {
             String json = objectMapper.writeValueAsString(entity);
+            logger.info("S3Repository:" + json);
+            logger.info("file  :" + file);
             InputStream inputStream = new ByteArrayInputStream(json.getBytes());
             PutObjectRequest putRequest = PutObjectRequest.builder()
                     .bucket(getBucketName())
-                    .key(folder + entity.getId() + ".json")
+                    .key(file)
                     .build();
             s3Client.putObject(putRequest, RequestBody.fromInputStream(inputStream, json.length()));
         } catch (JsonProcessingException ex) {
@@ -61,7 +63,7 @@ public class S3RepositoryImpl<T extends Identifiable> {
     public T findByKey(String key, Class<T> clazz) {
 
         String folder = clazz.getSimpleName();
-
+        logger.info("Buscando:" + folder + "/" + key + ".json");
         try {
             GetObjectRequest getRequest = GetObjectRequest.builder()
                     .bucket(getBucketName())
@@ -88,14 +90,15 @@ public class S3RepositoryImpl<T extends Identifiable> {
         s3Client.deleteObject(deleteRequest);
     }
 
-    public List<T> findAll(String prefix, Class<T> clazz) {
+    public List<T> findAll(String dni, Class<T> clazz) {
+        String prefix = clazz.getSimpleName() + "/" + dni;
 
-        logger.info("BucketName: [" + getBucketName());
-        logger.info("Prefix: {" + prefix + "/");
+        logger.info("BucketName: [" + getBucketName() + "]");
+        logger.info("Quiteria: {" + prefix + "}");
 
         ListObjectsV2Request request = ListObjectsV2Request.builder()
                 .bucket(getBucketName())
-                .prefix(prefix + "/")
+                .prefix(prefix)
                 .build();
 
         // Obtener los objetos de S3

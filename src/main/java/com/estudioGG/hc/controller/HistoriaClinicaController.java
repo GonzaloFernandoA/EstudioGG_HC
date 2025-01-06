@@ -33,7 +33,7 @@ public class HistoriaClinicaController {
     // Muestra el formulario para crear una nueva historia clínica
     @GetMapping("/nuevo")
     public String mostrarFormulario(Model model) {
-        // Creamos una nueva instancia para inicializar los datos
+
         model.addAttribute("historiaClinica", new HistoriaClinica());
         model.addAttribute("opcionesParte", categorias.getPartesCuerpo());
         model.addAttribute("opcionesUbicacion", categorias.getUbicaciones());
@@ -52,7 +52,8 @@ public class HistoriaClinicaController {
             model.addAttribute("successMessage", "Historia clínica guardada exitosamente.");
             return "redirect:/historia-clinica/nuevo"; // Redirigir al listado o una página de éxito
         } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            logger.error(e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "historia-clinica/formulario"; // Volver al formulario si hay error
         }
     }

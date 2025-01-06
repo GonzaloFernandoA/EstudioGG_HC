@@ -8,6 +8,8 @@ import com.estudioGG.hc.model.Cliente;
 import com.estudioGG.hc.model.Demanda;
 import com.estudioGG.hc.model.HistoriaClinica;
 import com.estudioGG.hc.repository.S3RepositoryImpl;
+import com.estudioGG.hc.utils.ListaValidator;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,28 +22,47 @@ public class DemandaService {
     
     private final S3RepositoryImpl<Demanda> repository;
     private final ClienteService clienteService; 
+    private final HistoriaClinicaService _hcService; 
+    
+    @Autowired
+    ListaValidator validador ;
     
     @Autowired
     public DemandaService(S3RepositoryImpl<Demanda> Repository, 
-    ClienteService clienteService) {
+    ClienteService clienteService, HistoriaClinicaService hcService) {
         this.repository = Repository;
         this.clienteService = clienteService; 
+        this._hcService = hcService;
     }
 
     public void guardar(Demanda entidad) {
         
-        Cliente cliente = clienteService.obtener(entidad.getDni()); 
-        if ( cliente == null ) 
-        {
-            
-            throw new IllegalArgumentException("El DNI no pertenece a ningún cliente registrado.");
-     
-        } else {
+        this.valid(entidad);
         repository.save(entidad.getId(), entidad);
-        }
         
     }
 
+ 
+    public void valid(Demanda entidad)
+    {
+        HistoriaClinica hc = _hcService.obtener(entidad.getId());
+        if ( hc == null ) 
+            throw new IllegalArgumentException("No existe Historia Clinica cargada para ." + entidad.getDni() + " con la fecha " + entidad.getFecha());
+        
+        
+        if ( validador.validarListasIgualesSinOrden(entidad.getRegistros(), hc.getRegistros()))
+        {} else  throw new IllegalArgumentException("las lesiones cargadas no concuerdan con la Historia Clinica");
+        
+        
+        
+    }
+    
+    public List<Demanda> getAll(String dni)
+    {
+        return repository.findAll(dni, Demanda.class);
+    }
+    
+    
     public Demanda obtener(String id) {
         return repository.findByKey(id, Demanda.class);
     }

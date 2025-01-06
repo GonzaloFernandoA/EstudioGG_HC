@@ -59,7 +59,7 @@ public class DemandaController {
             model.addAttribute("successMessage", "Demanda guardada exitosamente.");
             return "redirect:/demanda/nuevo"; // Redirigir al listado o una página de éxito
         } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "demanda/formulario"; // Volver al formulario si hay error
         }
     }
