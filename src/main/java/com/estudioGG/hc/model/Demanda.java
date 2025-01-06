@@ -8,6 +8,6 @@ package com.estudioGG.hc.model;
  *
  * @author Gonzalo_Avalos
  */
-public class Demanda extends HistoriaClinica{
+public class Demanda extends HistoriaClinica {
     
 }

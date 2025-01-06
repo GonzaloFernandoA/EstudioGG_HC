@@ -4,12 +4,22 @@
  */
 package com.estudioGG.hc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Cliente implements Identifiable {
 
     private String apellido;
     private String nombre;
-    private String telefono;
+    private String antecedentes;
     private String dni;
+    
+    @JsonIgnore
+    private List<Proceso> historia; 
 
     @Override
     public String getId() {
@@ -20,11 +30,12 @@ public class Cliente implements Identifiable {
     {
     }
     // Constructor
-    public Cliente(String apellido, String nombre, String telefono, String dni) {
+    public Cliente(String apellido, String nombre, String antecedentes, String dni) {
         this.apellido = apellido;
         this.nombre = nombre;
-        this.telefono = telefono;
+        this.antecedentes = antecedentes;
         this.dni = dni;
+        this.historia = null;
     }
 
     // Getters y Setters
@@ -44,14 +55,6 @@ public class Cliente implements Identifiable {
         this.nombre = nombre;
     }
 
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
     public String getDni() {
         return dni;
     }
@@ -59,4 +62,45 @@ public class Cliente implements Identifiable {
     public void setDni(String dni) {
         this.dni = dni;
     }
+
+    /**
+     * @return the antecedentes
+     */
+    public String getAntecedentes() {
+        return antecedentes;
+    }
+
+    /**
+     * @param antecedentes the antecedentes to set
+     */
+    public void setAntecedentes(String antecedentes) {
+        this.antecedentes = antecedentes;
+    }
+
+    /**
+     * @return the historia
+     */
+    @JsonIgnore
+    public List<Proceso> getHistoria() {
+        return historia;
+    }
+
+    /**
+     * @param historia the historia to set
+     */
+    public void setHistoria(List<Proceso> historia) {
+        this.historia = historia;
+    }
+    
+    public String toJson()
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(HistoriaClinica.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
 }

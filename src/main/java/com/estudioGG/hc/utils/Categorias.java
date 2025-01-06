@@ -17,23 +17,25 @@ public class Categorias {
 
     public List<ComboOpcion> getUbicaciones() {
         List<ComboOpcion> opciones = new ArrayList<>();
+        opciones.add(new ComboOpcion("-", "-"));
         opciones.add(new ComboOpcion("I", "Izquierdo"));
         opciones.add(new ComboOpcion("D", "Derecho"));
-        opciones.add(new ComboOpcion("C", "Centro"));
-        opciones.add(new ComboOpcion("S", "Superior"));
-        opciones.add(new ComboOpcion("N", "Inferior"));
-        opciones.add(new ComboOpcion("A", "Adelante"));
-        opciones.add(new ComboOpcion("T", "Atras"));
         return opciones;
     }
 
     public List<ComboOpcion> getPartesCuerpo() {
         List<ComboOpcion> opciones = new ArrayList<>();
-        opciones.add(new ComboOpcion("H", "Hombro"));
-        opciones.add(new ComboOpcion("P", "Pie"));
-        opciones.add(new ComboOpcion("M", "Mano"));
-        opciones.add(new ComboOpcion("E", "Pecho"));
-        opciones.add(new ComboOpcion("C", "Cabeza"));
+        opciones.add(new ComboOpcion("CE", "CERVICAL"));
+        opciones.add(new ComboOpcion("LU", "LUMBAR"));
+        opciones.add(new ComboOpcion("HO", "HOMBRO"));
+        opciones.add(new ComboOpcion("CO", "CODO"));
+
+        opciones.add(new ComboOpcion("MU", "MUÑECA"));
+        opciones.add(new ComboOpcion("DO", "DORSAL")); 
+        opciones.add(new ComboOpcion("RO", "RODILLA"));         
+        opciones.add(new ComboOpcion("FX", "FRACTURA"));           
+        opciones.add(new ComboOpcion("TO", "TOBILLO"));          
+        
         return opciones;
     }
 }

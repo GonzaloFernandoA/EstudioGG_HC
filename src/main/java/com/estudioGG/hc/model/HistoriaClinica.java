@@ -6,43 +6,35 @@ package com.estudioGG.hc.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class HistoriaClinica implements Identifiable {
+public class HistoriaClinica implements Identifiable, IComprobantes {
 
-    private String codigo; // Identificador único de la historia clínica
     private String dni;    // Relación con el cliente
     private String fecha;  // Fecha en formato ISO 8601 (YYYY-MM-DD)
     private List<Registro> registros = new ArrayList<>(); // Lista de registros
+    private String fechaCarga = LocalDate.now().toString();
 
     @Override
     public String getId() {
-        return getCodigo(); // Usamos el código como identificador
+        return dni+fecha; // Usamos el código como identificador
     }
 
     public HistoriaClinica() {
-      
     }
 
     // Constructor
     public HistoriaClinica(String codigo, String dni, String fecha, List<Registro> registros) {
-        this.codigo = codigo;
         this.dni = dni;
         this.fecha = fecha;
         this.registros = registros;
     }
 
     // Getters y Setters
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
 
     public String getDni() {
         return dni;
@@ -77,5 +69,19 @@ public class HistoriaClinica implements Identifiable {
             Logger.getLogger(HistoriaClinica.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    /**
+     * @return the fechaCarga
+     */
+    public String getFechaCarga() {
+        return fechaCarga;
+    }
+
+    /**
+     * @param fechaCarga the fechaCarga to set
+     */
+    public void setFechaCarga(String fechaCarga) {
+        this.fechaCarga = fechaCarga;
     }
 }
