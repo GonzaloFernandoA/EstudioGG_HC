@@ -90,6 +90,37 @@ public class S3RepositoryImpl<T extends Identifiable> {
         s3Client.deleteObject(deleteRequest);
     }
 
+    
+        public List<T> findAll(Class<T> clazz) {
+        String prefix = clazz.getSimpleName() + "/" ;
+
+        logger.info("BucketName: [" + getBucketName() + "]");
+        logger.info("Quiteria: {" + prefix + "}");
+
+        ListObjectsV2Request request = ListObjectsV2Request.builder()
+                .bucket(getBucketName())
+                .prefix(prefix)
+                .build();
+
+        // Obtener los objetos de S3
+        ListObjectsV2Response response = s3Client.listObjectsV2(request);
+
+        // Mapear cada objeto S3 al tipo T usando ObjectMapper
+        return response.contents().stream()
+                .map(s3Object -> {
+                    try (InputStream inputStream = s3Client.getObject(GetObjectRequest.builder()
+                            .bucket(getBucketName())
+                            .key(s3Object.key())
+                            .build())) {
+
+                        return objectMapper.readValue(inputStream, clazz);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Error al leer el objeto S3: " + s3Object.key(), e);
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+    
     public List<T> findAll(String dni, Class<T> clazz) {
         String prefix = clazz.getSimpleName() + "/" + dni;
 

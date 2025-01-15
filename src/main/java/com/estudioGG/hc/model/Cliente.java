@@ -15,7 +15,8 @@ public class Cliente implements Identifiable {
 
     private String apellido;
     private String nombre;
-    private String antecedentes;
+    private String compania;
+    private String centro;
     private String dni;
     
     @JsonIgnore
@@ -30,10 +31,11 @@ public class Cliente implements Identifiable {
     {
     }
     // Constructor
-    public Cliente(String apellido, String nombre, String antecedentes, String dni) {
+    public Cliente(String apellido, String nombre, String compania, String dni, String centro) {
         this.apellido = apellido;
         this.nombre = nombre;
-        this.antecedentes = antecedentes;
+        this.compania = compania;
+        this.centro = centro; 
         this.dni = dni;
         this.historia = null;
     }
@@ -64,20 +66,6 @@ public class Cliente implements Identifiable {
     }
 
     /**
-     * @return the antecedentes
-     */
-    public String getAntecedentes() {
-        return antecedentes;
-    }
-
-    /**
-     * @param antecedentes the antecedentes to set
-     */
-    public void setAntecedentes(String antecedentes) {
-        this.antecedentes = antecedentes;
-    }
-
-    /**
      * @return the historia
      */
     @JsonIgnore
@@ -101,6 +89,34 @@ public class Cliente implements Identifiable {
             Logger.getLogger(HistoriaClinica.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    /**
+     * @return the compania
+     */
+    public String getCompania() {
+        return compania;
+    }
+
+    /**
+     * @param compania the compania to set
+     */
+    public void setCompania(String compania) {
+        this.compania = compania;
+    }
+
+    /**
+     * @return the centro
+     */
+    public String getCentro() {
+        return centro;
+    }
+
+    /**
+     * @param centro the centro to set
+     */
+    public void setCentro(String centro) {
+        this.centro = centro;
     }
     
 }

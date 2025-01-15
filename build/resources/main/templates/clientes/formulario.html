@@ -35,8 +35,8 @@
             const dni = document.getElementById("dni").value;
             const apellido = document.getElementById("apellido").value;
             const nombre = document.getElementById("nombre").value;
-            const antecedentes = document.getElementById("antecedentes").value;
-
+            const compania = document.getElementById("compania").value;
+            const centro = document.getElementById("centro").value;
             if (!dni) {
                 alert("Debe buscar un cliente antes de actualizar.");
                 return;
@@ -46,7 +46,8 @@
         dni: dni,
         apellido: apellido,
         nombre: nombre,
-        antecedentes: antecedentes
+        compania: compania,
+        centro: centro
     };
 
     try {
@@ -91,11 +92,13 @@
                         const cliente = await clienteResponse.json();
                         document.getElementById("nombre").value = cliente.nombre || "";
                         document.getElementById("apellido").value = cliente.apellido || "";
-                        document.getElementById("antecedentes").value = cliente.antecedentes || "";
-                        
+                        document.getElementById("compania").value = cliente.compania || "";
+                        document.getElementById("centro").value = cliente.compania || "";       
+                                
                         document.getElementById("nombre").disabled = false;
                         document.getElementById("apellido").disabled = false;
-                        document.getElementById("antecedentes").disabled = false;
+                        document.getElementById("compania").disabled = false;
+                        document.getElementById("centro").disabled = false;
                         document.getElementById("dni").disabled = true;
                         const submitButton = document.getElementById("submitButton");
                         submitButton.textContent = "Actualizar";
@@ -110,42 +113,31 @@
                     const processes = await historyResponse.json();
 
                     // Mostrar procesos
-// Obtener el cuerpo de la tabla
-const processTableBody = document.querySelector("#processTable tbody");
+                    // Obtener el cuerpo de la tabla
+                    const processTableBody = document.querySelector("#processTable tbody");
 
-// Limpiar la tabla por si hay datos previos
-processTableBody.innerHTML = "";
+                    // Limpiar la tabla por si hay datos previos
+                    processTableBody.innerHTML = "";
 
-// Procesar cada proceso y sus elementos
-processes.forEach((process, index) => {
-    const components = [
-        { tipo: "Historia Clínica", data: process.historia },
-        { tipo: "Demanda", data: process.demanda },
-        { tipo: "Estudios Perito", data: process.estudios },
-        { tipo: "Pericia", data: process.pericia }
-    ];
-
-    components.forEach(component => {
-        if (component.data) {
-            const row = document.createElement("tr");
-
-            row.innerHTML = `
-                <td>${component.tipo}</td>
-                <td>${component.data.fecha}</td>
-                <td>${component.data.fechaCarga}</td>
-            `;
-
-            processTableBody.appendChild(row);
-        }
-    });
-});
-
-                } catch (error) {
+                    // Procesar cada proceso y sus elementos
+                    processes.forEach((process, index) => {
+                        
+                        const row = document.createElement("tr");
+                        row.innerHTML = `<td>Lesiones</td>
+                        <td>${process.historia.fechaCarga ? process.historia.fechaCarga : "S/D" }</td>
+                        <td>${process.demanda.fechaCarga ? process.demanda.fechaCarga : "S/D" }</td>
+                        <td>${process.estudios.fechaCarga ? process.estudios.fechaCarga : "S/D"}</td>
+                        <td>${process.pericias.fechaCarga ? process.pericias.fechaCarga : "S/D"}</td>  `;
+                
+                        processTableBody.appendChild(row);
+                         });
+                     }
+                catch (error) {
                     console.error("Error al consultar el backend:", error);
                 } finally {
         // Ocultar el indicador de carga
-        loadingIndicator.style.display = "none";
-    }
+               loadingIndicator.style.display = "none";
+               }
             }
         </script>
     </head>
@@ -173,9 +165,14 @@ processes.forEach((process, index) => {
                     <input type="text" id="nombre" th:field="*{nombre}" placeholder="Ingrese el nombre"  />
                 </div>
                 <div>
-                    <label for="antecedentes">Antecedentes:</label>
-                    <input type="text" id="antecedentes" th:field="*{antecedentes}" placeholder="Ingrese antecedentes"  />
+                    <label for="compania">Compania de Seguro</label>
+                    <input type="text" id="compania" th:field="*{compania}" placeholder="Ingrese compania"  />
                 </div>
+                <div>
+                    <label for="centro">Centro Medico</label>
+                    <input type="text" id="centro" th:field="*{centro}" placeholder="Ingrese Centro Medico"  />
+                </div>
+                
                 <div>
                     <button type="submit" id="submitButton" >Guardar</button>
                 </div>
@@ -192,9 +189,11 @@ processes.forEach((process, index) => {
                 <table id="processTable" class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Tipo</th>
-                            <th>Fecha Siniestro</th>
-                            <th>Fecha Carga</th>
+                            <th>Lesiones</th>
+                            <th>Hist. C</th>
+                            <th>Demanda</th>
+                            <th>Estudio</th>
+                            <th>Pericia</th>
                         </tr>
                     </thead>
                     <tbody>

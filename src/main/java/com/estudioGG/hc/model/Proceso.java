@@ -9,6 +9,7 @@ package com.estudioGG.hc.model;
  * @author Gonzalo_Avalos
  */
 public class Proceso {
+    private String Lesiones; 
     private HistoriaClinica historia; 
     private Demanda demanda; 
     private EstudiosPerito estudios; 
@@ -68,5 +69,19 @@ public class Proceso {
      */
     public void setPericia(Pericia pericia) {
         this.pericia = pericia;
+    }
+
+    /**
+     * @return the Lesiones
+     */
+    public String getLesiones() {
+        return Lesiones;
+    }
+
+    /**
+     * @param Lesiones the Lesiones to set
+     */
+    public void setLesiones(String Lesiones) {
+        this.Lesiones = Lesiones;
     }
 }
