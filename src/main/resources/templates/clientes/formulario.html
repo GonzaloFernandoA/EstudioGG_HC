@@ -112,6 +112,8 @@
                     const historyResponse = await fetch(`/history/${dni}`);
                     const processes = await historyResponse.json();
 
+                    console.info(processes);
+
                     // Mostrar procesos
                     // Obtener el cuerpo de la tabla
                     const processTableBody = document.querySelector("#processTable tbody");
@@ -121,16 +123,22 @@
 
                     // Procesar cada proceso y sus elementos
                     processes.forEach((process, index) => {
-                        
                         const row = document.createElement("tr");
-                        row.innerHTML = `<td>Lesiones</td>
-                        <td>${process.historia.fechaCarga ? process.historia.fechaCarga : "S/D" }</td>
-                        <td>${process.demanda.fechaCarga ? process.demanda.fechaCarga : "S/D" }</td>
-                        <td>${process.estudios.fechaCarga ? process.estudios.fechaCarga : "S/D"}</td>
-                        <td>${process.pericias.fechaCarga ? process.pericias.fechaCarga : "S/D"}</td>  `;
+                    
+                    console.info(process.lesiones);
+                    
+                    const lesionesContent = process.lesiones && process.lesiones.length > 0
+                        ? process.lesiones.join("<br>") // Une los elementos con <br> entre ellos
+                        : "Sin lesiones"; // Texto predeterminado si no hay lesiones
+
+                        row.innerHTML = `<td>${lesionesContent}</td>
+                        <td>${process.historia && process.historia.fechaCarga ? process.historia.fechaCarga : "S/D" }</td>
+                        <td>${process.demanda && process.demanda.fechaCarga ? process.demanda.fechaCarga : "S/D" }</td>
+                        <td>${process.estudios && process.estudios.fechaCarga ? process.estudios.fechaCarga : "S/D"}</td>
+                        <td>${process.pericias && process.pericias.fechaCarga ? process.pericias.fechaCarga : "S/D"}</td>  `;
                 
                         processTableBody.appendChild(row);
-                         });
+                     });
                      }
                 catch (error) {
                     console.error("Error al consultar el backend:", error);

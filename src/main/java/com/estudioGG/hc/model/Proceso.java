@@ -4,12 +4,14 @@
  */
 package com.estudioGG.hc.model;
 
+import java.util.List;
+
 /**
  *
  * @author Gonzalo_Avalos
  */
 public class Proceso {
-    private String Lesiones; 
+    private List<String> Lesiones; 
     private HistoriaClinica historia; 
     private Demanda demanda; 
     private EstudiosPerito estudios; 
@@ -74,14 +76,14 @@ public class Proceso {
     /**
      * @return the Lesiones
      */
-    public String getLesiones() {
+    public List<String> getLesiones() {
         return Lesiones;
     }
 
     /**
      * @param Lesiones the Lesiones to set
      */
-    public void setLesiones(String Lesiones) {
+    public void setLesiones(List<String> Lesiones) {
         this.Lesiones = Lesiones;
     }
 }

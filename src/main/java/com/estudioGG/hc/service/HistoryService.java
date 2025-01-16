@@ -4,7 +4,6 @@
  */
 package com.estudioGG.hc.service;
 
-import com.estudioGG.hc.controller.ClienteController;
 import com.estudioGG.hc.model.HistoriaClinica;
 import com.estudioGG.hc.model.Proceso;
 import java.util.ArrayList;
@@ -43,12 +42,24 @@ public class HistoryService {
         
         historias.forEach(his -> {
             logger.info("Identificador:" + his.getId());
+            
             Proceso proceso = new Proceso();
             proceso.setHistoria(his);
+            
+            List<String> linea = new ArrayList<>();
+            his.getRegistros().forEach(reg -> 
+            {
+                    logger.info(reg.getCodigoParteCuerpo() + " - " + reg.getCodigoUbicacion());
+                    linea.add(reg.getCodigoParteCuerpo() + " - " + reg.getCodigoUbicacion());
+            });
+                    
+            proceso.setLesiones(linea);
             proceso.setDemanda(demandas.obtener(his.getId()));
             proceso.setEstudios(estudios.obtener(his.getId()));
             proceso.setPericia(pericias.obtener(his.getId()));
 
+            logger.info("tamaño" + proceso.getLesiones().size());
+            
             procesos.add(proceso);
         });
 
