@@ -7,6 +7,7 @@ package com.estudioGG.hc.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,8 +16,10 @@ public class Cliente implements Identifiable {
 
     private String apellido;
     private String nombre;
-    private String antecedentes;
+    private String centro;
     private String dni;
+    private String companias ;
+    
     
     @JsonIgnore
     private List<Proceso> historia; 
@@ -30,10 +33,11 @@ public class Cliente implements Identifiable {
     {
     }
     // Constructor
-    public Cliente(String apellido, String nombre, String antecedentes, String dni) {
+    public Cliente(String apellido, String nombre, String companias, String dni, String centro) {
         this.apellido = apellido;
         this.nombre = nombre;
-        this.antecedentes = antecedentes;
+        this.companias = companias;
+        this.centro = centro; 
         this.dni = dni;
         this.historia = null;
     }
@@ -64,20 +68,6 @@ public class Cliente implements Identifiable {
     }
 
     /**
-     * @return the antecedentes
-     */
-    public String getAntecedentes() {
-        return antecedentes;
-    }
-
-    /**
-     * @param antecedentes the antecedentes to set
-     */
-    public void setAntecedentes(String antecedentes) {
-        this.antecedentes = antecedentes;
-    }
-
-    /**
      * @return the historia
      */
     @JsonIgnore
@@ -101,6 +91,34 @@ public class Cliente implements Identifiable {
             Logger.getLogger(HistoriaClinica.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    /**
+     * @return the centro
+     */
+    public String getCentro() {
+        return centro;
+    }
+
+    /**
+     * @param centro the centro to set
+     */
+    public void setCentro(String centro) {
+        this.centro = centro;
+    }
+
+    /**
+     * @return the companias
+     */
+    public String getCompanias() {
+        return companias;
+    }
+
+    /**
+     * @param companias the companias to set
+     */
+    public void setCompanias(String companias) {
+        this.companias = companias;
     }
     
 }

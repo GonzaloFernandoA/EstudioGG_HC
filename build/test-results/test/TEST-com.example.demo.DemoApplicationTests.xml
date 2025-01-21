@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.demo.DemoApplicationTests" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-01-06T01:17:26" hostname="ITRP0685" time="2.394">
+<testsuite name="com.example.demo.DemoApplicationTests" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-01-20T22:49:39" hostname="ITRP0685" time="2.251">
   <properties/>
-  <testcase name="ValidationListTest()" classname="com.example.demo.DemoApplicationTests" time="2.353"/>
-  <testcase name="ValidationListTest2()" classname="com.example.demo.DemoApplicationTests" time="0.006"/>
-  <testcase name="ValidationListTest3()" classname="com.example.demo.DemoApplicationTests" time="0.003"/>
-  <testcase name="ValidationListTest4()" classname="com.example.demo.DemoApplicationTests" time="0.003"/>
-  <testcase name="ValidationListTest5()" classname="com.example.demo.DemoApplicationTests" time="0.004"/>
+  <testcase name="ValidationListTest()" classname="com.example.demo.DemoApplicationTests" time="2.21"/>
+  <testcase name="ValidationListTest2()" classname="com.example.demo.DemoApplicationTests" time="0.005"/>
+  <testcase name="ValidationListTest3()" classname="com.example.demo.DemoApplicationTests" time="0.001"/>
+  <testcase name="ValidationListTest4()" classname="com.example.demo.DemoApplicationTests" time="0.004"/>
+  <testcase name="ValidationListTest5()" classname="com.example.demo.DemoApplicationTests" time="0.003"/>
   <testcase name="ValidationListTest6()" classname="com.example.demo.DemoApplicationTests" time="0.002"/>
-  <testcase name="contextLoads()" classname="com.example.demo.DemoApplicationTests" time="0.002"/>
-  <testcase name="testSample()" classname="com.example.demo.DemoApplicationTests" time="0.004"/>
+  <testcase name="contextLoads()" classname="com.example.demo.DemoApplicationTests" time="0.005"/>
+  <testcase name="testSample()" classname="com.example.demo.DemoApplicationTests" time="0.002"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClienteService<T extends Identifiable> {
     
-        private static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ClienteService.class);
     
     private final S3RepositoryImpl<Cliente> ClienteRepository;
     
@@ -37,6 +37,6 @@ public class ClienteService<T extends Identifiable> {
     }
     
     public List<Cliente> obtenerTodos() {
-        return ClienteRepository.findAll(Cliente.class.getSimpleName(),Cliente.class);
+        return ClienteRepository.findAll(Cliente.class);
     }
 }
