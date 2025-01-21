@@ -7,6 +7,7 @@ package com.estudioGG.hc.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,9 +16,10 @@ public class Cliente implements Identifiable {
 
     private String apellido;
     private String nombre;
-    private String compania;
     private String centro;
     private String dni;
+    private String companias ;
+    
     
     @JsonIgnore
     private List<Proceso> historia; 
@@ -31,10 +33,10 @@ public class Cliente implements Identifiable {
     {
     }
     // Constructor
-    public Cliente(String apellido, String nombre, String compania, String dni, String centro) {
+    public Cliente(String apellido, String nombre, String companias, String dni, String centro) {
         this.apellido = apellido;
         this.nombre = nombre;
-        this.compania = compania;
+        this.companias = companias;
         this.centro = centro; 
         this.dni = dni;
         this.historia = null;
@@ -92,20 +94,6 @@ public class Cliente implements Identifiable {
     }
 
     /**
-     * @return the compania
-     */
-    public String getCompania() {
-        return compania;
-    }
-
-    /**
-     * @param compania the compania to set
-     */
-    public void setCompania(String compania) {
-        this.compania = compania;
-    }
-
-    /**
      * @return the centro
      */
     public String getCentro() {
@@ -117,6 +105,20 @@ public class Cliente implements Identifiable {
      */
     public void setCentro(String centro) {
         this.centro = centro;
+    }
+
+    /**
+     * @return the companias
+     */
+    public String getCompanias() {
+        return companias;
+    }
+
+    /**
+     * @param companias the companias to set
+     */
+    public void setCompanias(String companias) {
+        this.companias = companias;
     }
     
 }

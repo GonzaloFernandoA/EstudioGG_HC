@@ -4,6 +4,18 @@
         <title>Formulario de Cliente</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+    .contenedor {
+        width: 65%;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+        
             .spinner {
         border: 4px solid #f3f3f3;
         border-top: 4px solid #3498db;
@@ -31,48 +43,115 @@
     </style>
         <script>
             
+             let contador = 1; // Para numerar las filas
+
+        function agregarRegistro() {
+            // Obtener el valor del input
+            let texto = document.getElementById("inputTexto").value.trim();
+
+            // Verificar que el input no esté vacío
+            if (texto === "") {
+                alert("Por favor, ingresa una compañia.");
+                return;
+            }
+
+            // Obtener la tabla y crear una nueva fila
+            let tabla = document.getElementById("tablaDatos").getElementsByTagName('tbody')[0];
+            let nuevaFila = document.createElement("tr");
+
+            // Crear celdas
+            let celdaNumero = document.createElement("td");
+            let celdaTexto = document.createElement("td");
+            let celdaBoton = document.createElement("td");
+
+            // Asignar valores
+            celdaNumero.innerText = contador++; // Número autoincremental
+            celdaTexto.innerText = texto; // Texto ingresado
+
+            // Crear botón de eliminar
+            let botonEliminar = document.createElement("button");
+            botonEliminar.innerText = "Eliminar";
+            botonEliminar.className = "btnEliminar";
+            botonEliminar.onclick = function() {
+                eliminarRegistro(nuevaFila);
+            };
+
+            // Agregar botón a la celda de acción
+            celdaBoton.appendChild(botonEliminar);
+
+            nuevaFila.appendChild(celdaNumero);
+            nuevaFila.appendChild(celdaTexto);
+            nuevaFila.appendChild(celdaBoton);
+
+            // Agregar fila a la tabla
+            tabla.appendChild(nuevaFila);
+
+            // Limpiar el input
+            document.getElementById("inputTexto").value = "";
+        }
+           
+         function agregarCompaniasCliente(companias) {
+            let tabla = document.getElementById("tablaDatos").getElementsByTagName('tbody')[0];
+
+            companias.forEach(compania => {
+                let nuevaFila = document.createElement("tr");
+
+                let celdaNumero = document.createElement("td");
+                let celdaTexto = document.createElement("td");
+                let celdaBoton = document.createElement("td");
+
+                celdaNumero.innerText = contador++; // Número autoincremental
+                celdaTexto.innerText = compania; // Nombre de la compañía
+
+                // No se agrega botón de eliminar a las compañías
+
+                nuevaFila.appendChild(celdaNumero);
+                nuevaFila.appendChild(celdaTexto);
+                nuevaFila.appendChild(celdaBoton);
+                tabla.appendChild(nuevaFila);
+            });
+        }
+    
+    
             async function actualizarCliente() {
             const dni = document.getElementById("dni").value;
             const apellido = document.getElementById("apellido").value;
             const nombre = document.getElementById("nombre").value;
-            const compania = document.getElementById("compania").value;
             const centro = document.getElementById("centro").value;
             if (!dni) {
                 alert("Debe buscar un cliente antes de actualizar.");
                 return;
             }
 
-    const cliente = {
-        dni: dni,
-        apellido: apellido,
-        nombre: nombre,
-        compania: compania,
-        centro: centro
-    };
+            const cliente = {
+                dni: dni,
+                apellido: apellido,
+                nombre: nombre,
+                centro: centro
+            };
 
-    try {
-        const response = await fetch('/clientes/actualizar', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(cliente)
-        });
+            try {
+                const response = await fetch('/clientes/actualizar', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(cliente)
+                });
 
-        if (response.ok) {
-            alert("Cliente actualizado correctamente.");
-        } else {
-            alert("Error al actualizar el cliente.");
-        }
-    } catch (error) {
-        console.error("Error al realizar la solicitud PUT:", error);
-        alert("Error al actualizar el cliente.");
-    }
-}
+                if (response.ok) {
+                    alert("Cliente actualizado correctamente.");
+                } else {
+                    alert("Error al actualizar el cliente.");
+                }
+            } catch (error) {
+                console.error("Error al realizar la solicitud PUT:", error);
+                alert("Error al actualizar el cliente.");
+            }
+           }
 
             
             function limpiarFormulario() {
-    // Recargar la página actual
             window.location.reload();
             }
             
@@ -92,14 +171,15 @@
                         const cliente = await clienteResponse.json();
                         document.getElementById("nombre").value = cliente.nombre || "";
                         document.getElementById("apellido").value = cliente.apellido || "";
-                        document.getElementById("compania").value = cliente.compania || "";
-                        document.getElementById("centro").value = cliente.compania || "";       
-                                
+                        document.getElementById("centro").value = cliente.centro || "";       
+                        document.getElementById("companias").value = cliente.companias || "";            
+                        
                         document.getElementById("nombre").disabled = false;
                         document.getElementById("apellido").disabled = false;
-                        document.getElementById("compania").disabled = false;
                         document.getElementById("centro").disabled = false;
+                        document.getElementById("companias").disabled = false;
                         document.getElementById("dni").disabled = true;
+                        
                         const submitButton = document.getElementById("submitButton");
                         submitButton.textContent = "Actualizar";
                         
@@ -123,19 +203,17 @@
 
                     // Procesar cada proceso y sus elementos
                     processes.forEach((process, index) => {
-                        const row = document.createElement("tr");
-                    
-                    console.info(process.lesiones);
+                    const row = document.createElement("tr");
                     
                     const lesionesContent = process.lesiones && process.lesiones.length > 0
                         ? process.lesiones.join("<br>") // Une los elementos con <br> entre ellos
                         : "Sin lesiones"; // Texto predeterminado si no hay lesiones
 
                         row.innerHTML = `<td>${lesionesContent}</td>
-                        <td>${process.historia && process.historia.fechaCarga ? process.historia.fechaCarga : "S/D" }</td>
-                        <td>${process.demanda && process.demanda.fechaCarga ? process.demanda.fechaCarga : "S/D" }</td>
-                        <td>${process.estudios && process.estudios.fechaCarga ? process.estudios.fechaCarga : "S/D"}</td>
-                        <td>${process.pericias && process.pericias.fechaCarga ? process.pericias.fechaCarga : "S/D"}</td>  `;
+                        <td>${process.historia && process.historia.fechaCarga ? lesionesContent : "" }</td>
+                        <td>${process.demanda && process.demanda.fechaCarga ? lesionesContent : "" }</td>
+                        <td>${process.estudios && process.estudios.fechaCarga ? lesionesContent : ""}</td>
+                        <td>${process.pericias && process.pericias.fechaCarga ? lesionesContent : ""}</td>  `;
                 
                         processTableBody.appendChild(row);
                      });
@@ -173,14 +251,16 @@
                     <input type="text" id="nombre" th:field="*{nombre}" placeholder="Ingrese el nombre"  />
                 </div>
                 <div>
-                    <label for="compania">Compania de Seguro</label>
-                    <input type="text" id="compania" th:field="*{compania}" placeholder="Ingrese compania"  />
-                </div>
-                <div>
                     <label for="centro">Centro Medico</label>
                     <input type="text" id="centro" th:field="*{centro}" placeholder="Ingrese Centro Medico"  />
                 </div>
                 
+                <div>
+                    <label for="compania">Companias Seguros Medico</label>
+                    <input type="text" id="companias" th:field="*{companias}" placeholder="Ingrese Compañias" 
+                           style="width: 300px; height: 40px; font-size: 16px; padding: 8px;" />
+                </div>
+
                 <div>
                     <button type="submit" id="submitButton" >Guardar</button>
                 </div>
@@ -191,17 +271,17 @@
         </div>
 
         <!-- Panel Derecho: Lista de Procesos -->
-        <div class="col-md-6">
-            <div id="processList">
+        <div class="col-12">
+            <div id="processList" >
                 <h3>Procesos:</h3>
-                <table id="processTable" class="table table-bordered">
+                <table id="processTable" class="table table-bordered" >
                     <thead>
                         <tr>
-                            <th>Lesiones</th>
-                            <th>Hist. C</th>
-                            <th>Demanda</th>
-                            <th>Estudio</th>
-                            <th>Pericia</th>
+                            <th style="width: 200px;">Lesiones</th>
+                            <th style="width: 200px;">Hist. C</th>
+                            <th style="width: 200px;">Demanda</th>
+                            <th style="width: 200px;">Estudio</th>
+                            <th style="width: 200px;">Pericia</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -6,6 +6,7 @@ package com.estudioGG.hc.service;
 
 import com.estudioGG.hc.model.HistoriaClinica;
 import com.estudioGG.hc.model.Proceso;
+import com.estudioGG.hc.utils.Categorias;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,9 @@ import org.springframework.stereotype.Service;
 public class HistoryService {
 
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(HistoryService.class);
+    
+    @Autowired
+    Categorias categoria; 
     
     @Autowired
     HistoriaClinicaService historia;
@@ -50,7 +54,7 @@ public class HistoryService {
             his.getRegistros().forEach(reg -> 
             {
                     logger.info(reg.getCodigoParteCuerpo() + " - " + reg.getCodigoUbicacion());
-                    linea.add(reg.getCodigoParteCuerpo() + " - " + reg.getCodigoUbicacion());
+                    linea.add(transformPartesCuerpo(reg.getCodigoParteCuerpo()) + " - " + transformUbicacion(reg.getCodigoUbicacion()));
             });
                     
             proceso.setLesiones(linea);
@@ -64,5 +68,15 @@ public class HistoryService {
         });
 
         return procesos;
+    }
+    
+    private String transformPartesCuerpo(String parte)
+    {
+        return categoria.getDescripcionPorCodigo( parte) ;
+    }
+    
+        private String transformUbicacion(String parte)
+    {
+        return categoria.getDescripcionPorCodigoUbicacion(parte) ;
     }
 }
