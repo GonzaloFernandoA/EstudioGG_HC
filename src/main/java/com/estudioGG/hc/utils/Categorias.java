@@ -18,8 +18,8 @@ public class Categorias {
     public List<ComboOpcion> getUbicaciones() {
         List<ComboOpcion> opciones = new ArrayList<>();
         opciones.add(new ComboOpcion("-", "-"));
-        opciones.add(new ComboOpcion("I", "Izquierdo"));
-        opciones.add(new ComboOpcion("D", "Derecho"));
+        opciones.add(new ComboOpcion("IZQ", "Izquierdo"));
+        opciones.add(new ComboOpcion("DE", "Derecho"));
         return opciones;
     }
 
