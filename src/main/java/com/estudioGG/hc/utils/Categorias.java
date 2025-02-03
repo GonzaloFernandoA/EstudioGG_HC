@@ -50,7 +50,7 @@ public class Categorias {
                 return opcion.getDescripcion();
             }
         }
-        return "Código no encontrado"; // Mensaje si el código no existe
+        return "Código no encontrado (" + codigo + ")"; // Mensaje si el código no existe
     }
 
     public String getDescripcionPorCodigoUbicacion(String codigo) {
@@ -59,6 +59,6 @@ public class Categorias {
                 return opcion.getDescripcion();
             }
         }
-        return "Código no encontrado"; // Mensaje si el código no existe
+        return "Código no encontrado (" + codigo + ")";
     }
 }

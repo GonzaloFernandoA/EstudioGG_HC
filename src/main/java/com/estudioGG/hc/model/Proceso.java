@@ -11,12 +11,19 @@ import java.util.List;
  * @author Gonzalo_Avalos
  */
 public class Proceso {
+    
     private List<String> Lesiones; 
+    private List<String> LesionesD; 
+    private List<String> LesionesE; 
+    private List<String> LesionesP; 
+    
     private HistoriaClinica historia; 
     private Demanda demanda; 
     private EstudiosPerito estudios; 
     private Pericia pericia; 
 
+
+    
     /**
      * @return the historia
      */
@@ -85,5 +92,47 @@ public class Proceso {
      */
     public void setLesiones(List<String> Lesiones) {
         this.Lesiones = Lesiones;
+    }
+
+    /**
+     * @return the LesionesD
+     */
+    public List<String> getLesionesD() {
+        return LesionesD;
+    }
+
+    /**
+     * @param LesionesD the LesionesD to set
+     */
+    public void setLesionesD(List<String> LesionesD) {
+        this.LesionesD = LesionesD;
+    }
+
+    /**
+     * @return the LesionesE
+     */
+    public List<String> getLesionesE() {
+        return LesionesE;
+    }
+
+    /**
+     * @param LesionesE the LesionesE to set
+     */
+    public void setLesionesE(List<String> LesionesE) {
+        this.LesionesE = LesionesE;
+    }
+
+    /**
+     * @return the LesionesP
+     */
+    public List<String> getLesionesP() {
+        return LesionesP;
+    }
+
+    /**
+     * @param LesionesP the LesionesP to set
+     */
+    public void setLesionesP(List<String> LesionesP) {
+        this.LesionesP = LesionesP;
     }
 }

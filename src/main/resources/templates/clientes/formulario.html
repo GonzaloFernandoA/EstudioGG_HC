@@ -209,11 +209,24 @@
                         ? process.lesiones.join("<br>") // Une los elementos con <br> entre ellos
                         : "Sin lesiones"; // Texto predeterminado si no hay lesiones
 
+                    const lesionesContentD = process.lesionesD && process.lesionesD.length > 0
+                        ? process.lesionesD.join("<br>") // Une los elementos con <br> entre ellos
+                        : "Sin lesiones"; // Texto predeterminado si no hay lesiones
+                        
+                    const lesionesContentE = process.lesionesE && process.lesionesE.length > 0
+                        ? process.lesionesE.join("<br>") // Une los elementos con <br> entre ellos
+                        : "Sin lesiones"; // Texto predeterminado si no hay lesiones
+                        
+                    const lesionesContentP = process.lesionesP && process.lesionesP.length > 0
+                        ? process.lesionesP.join("<br>") // Une los elementos con <br> entre ellos
+                        : "Sin lesiones"; // Texto predeterminado si no hay lesiones
+
+
                         row.innerHTML = `<td>${lesionesContent}</td>
                         <td>${process.historia && process.historia.fechaCarga ? lesionesContent : "" }</td>
-                        <td>${process.demanda && process.demanda.fechaCarga ? lesionesContent : "" }</td>
-                        <td>${process.estudios && process.estudios.fechaCarga ? lesionesContent : ""}</td>
-                        <td>${process.pericia && process.pericia.fechaCarga ? lesionesContent : ""}</td>  `;
+                        <td>${process.demanda && process.demanda.fechaCarga ? lesionesContentD : "" }</td>
+                        <td>${process.estudios && process.estudios.fechaCarga ? lesionesContentE : ""}</td>
+                        <td>${process.pericia && process.pericia.fechaCarga ? lesionesContentP : ""}</td>  `;
                 
                         processTableBody.appendChild(row);
                      });
