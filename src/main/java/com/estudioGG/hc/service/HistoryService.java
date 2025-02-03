@@ -6,6 +6,7 @@ package com.estudioGG.hc.service;
 
 import com.estudioGG.hc.model.HistoriaClinica;
 import com.estudioGG.hc.model.Proceso;
+import com.estudioGG.hc.model.Registro;
 import com.estudioGG.hc.utils.Categorias;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,19 +50,20 @@ public class HistoryService {
             
             Proceso proceso = new Proceso();
             proceso.setHistoria(his);
+            proceso.setLesiones(getLesiones(his.getRegistros()));
             
-            List<String> linea = new ArrayList<>();
-            his.getRegistros().forEach(reg -> 
-            {
-                    logger.info(reg.getCodigoParteCuerpo() + " - " + reg.getCodigoUbicacion());
-                    linea.add(transformPartesCuerpo(reg.getCodigoParteCuerpo()) + " - " + transformUbicacion(reg.getCodigoUbicacion()));
-            });
-                    
-            proceso.setLesiones(linea);
             proceso.setDemanda(demandas.obtener(his.getId()));
-            proceso.setEstudios(estudios.obtener(his.getId()));
-            proceso.setPericia(pericias.obtener(his.getId()));
+            if( proceso.getDemanda() != null )
+                proceso.setLesionesD(getLesiones(proceso.getDemanda().getRegistros()));
 
+            proceso.setEstudios(estudios.obtener(his.getId()));
+            if( proceso.getEstudios() != null )
+                proceso.setLesionesE(getLesiones(proceso.getEstudios().getRegistros()));
+            
+            proceso.setPericia(pericias.obtener(his.getId()));
+            if( proceso.getPericia() != null )
+                proceso.setLesionesP(getLesiones(proceso.getPericia().getRegistros()));
+            
             logger.info("tamaño" + proceso.getLesiones().size());
             
             procesos.add(proceso);
@@ -70,13 +72,29 @@ public class HistoryService {
         return procesos;
     }
     
+    
+    
+    private List<String> getLesiones( List<Registro> registros )
+    {
+        List<String> lineaD = new ArrayList<>();
+        
+          registros.forEach(reg -> 
+            {
+                    logger.info(reg.getCodigoParteCuerpo() + " - " + reg.getCodigoUbicacion());
+                    lineaD.add(transformPartesCuerpo(reg.getCodigoParteCuerpo()) + " - " + transformUbicacion(reg.getCodigoUbicacion()));
+            });   
+        
+        
+        return lineaD;
+    }
+    
     private String transformPartesCuerpo(String parte)
     {
-        return categoria.getDescripcionPorCodigo( parte) ;
+        return categoria.getDescripcionPorCodigo(parte.toUpperCase()) ;
     }
     
         private String transformUbicacion(String parte)
     {
-        return categoria.getDescripcionPorCodigoUbicacion(parte) ;
+        return categoria.getDescripcionPorCodigoUbicacion(parte.toUpperCase()) ;
     }
 }
