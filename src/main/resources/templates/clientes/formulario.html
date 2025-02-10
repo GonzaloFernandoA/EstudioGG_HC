@@ -205,6 +205,8 @@
                     processes.forEach((process, index) => {
                     const row = document.createElement("tr");
                     
+                   
+                    
                     const lesionesContent = process.lesiones && process.lesiones.length > 0
                         ? process.lesiones.join("<br>") // Une los elementos con <br> entre ellos
                         : "Sin lesiones"; // Texto predeterminado si no hay lesiones
@@ -222,7 +224,7 @@
                         : "Sin lesiones"; // Texto predeterminado si no hay lesiones
 
 
-                        row.innerHTML = `<td>${lesionesContent}</td>
+                        row.innerHTML = `<td>${process.historia ? process.historia.fecha : "" }</td>
                         <td>${process.historia && process.historia.fechaCarga ? lesionesContent : "" }</td>
                         <td>${process.demanda && process.demanda.fechaCarga ? lesionesContentD : "" }</td>
                         <td>${process.estudios && process.estudios.fechaCarga ? lesionesContentE : ""}</td>
@@ -264,12 +266,12 @@
                     <input type="text" id="nombre" th:field="*{nombre}" placeholder="Ingrese el nombre"  />
                 </div>
                 <div>
-                    <label for="centro">Centro Medico</label>
+                    <label for="centro">Medico:</label>
                     <input type="text" id="centro" th:field="*{centro}" placeholder="Ingrese Centro Medico"  />
                 </div>
                 
                 <div>
-                    <label for="compania">Companias Seguros Medico</label>
+                    <label for="compania">Companias Seguro:</label>
                     <input type="text" id="companias" th:field="*{companias}" placeholder="Ingrese Compañias" 
                            style="width: 300px; height: 40px; font-size: 16px; padding: 8px;" />
                 </div>
@@ -290,7 +292,7 @@
                 <table id="processTable" class="table table-bordered" >
                     <thead>
                         <tr>
-                            <th style="width: 200px;">Lesiones</th>
+                            <th style="width: 200px;">Fecha Accidente</th>
                             <th style="width: 200px;">Hist. C</th>
                             <th style="width: 200px;">Demanda</th>
                             <th style="width: 200px;">Estudio</th>
