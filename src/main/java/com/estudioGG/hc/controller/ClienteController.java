@@ -44,6 +44,12 @@ public class ClienteController {
         model.addAttribute("cliente", new Cliente()); // Se pasa un objeto vacío para el formulario
         return "clientes/formulario";
     }
+    
+    @GetMapping("/turnos")
+    public String buscarRapido(Model model) {
+        model.addAttribute("cliente", new Cliente());
+        return "clientes/turnos";
+    }
 
     @GetMapping("/listado")
     public String listar(Model model) {
@@ -81,6 +87,4 @@ public class ClienteController {
       //  _service.guardar(cliente);
         return ResponseEntity.ok("Cliente actualizado correctamente");
     }
-    
-    
 }
