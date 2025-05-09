@@ -64,7 +64,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         <div>
                             <label>DNI: </label>
                             <input type="text" id="dni" th:field="*{dni}" placeholder="Ingrese el DNI" required/>
-                            <button type="button" onclick="verificarDni()">Buscar</button>
+                            <button type="button" id="botonBuscar" onclick="verificarDni()">Buscar</button>
                         </div>
 
                         <div>
@@ -83,24 +83,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </div>
 
                         <div>
-                            <label for="centro">Medico:</label>
-                            <input type="text" id="centro" th:field="*{centro}" placeholder="Ingrese Centro Medico" disabled="true"/>
-                        </div>
-
-                        <div>
-                            <label>Companias Seguro</label>
-                            <input type="text" id="companias" th:field="*{companias}" placeholder="Ingrese Compañias"
-                                   style="width: 300px; height: 40px; font-size: 16px; padding: 8px;" disabled="true"/>
-                        </div>
-
-                        <div>
                             <label for="turno">Turno:</label>
                             <input type="date" id="turno" onblur="verificarFechaAlGuardar()" th:field="*{turno}" placeholder="Ingrese el Turno" disabled="true"/>
                         </div>
 
                         <div>
                             <label for="hora">Hora:</label>
-                            <input type="number" id="hora" th:field="*{hora}" placeholder="Ingrese la hora" disabled="true"/>
+                            <input type="time" id="hora" th:field="*{hora}" placeholder="Ingrese la hora" disabled="true"/>
                         </div>
 
                         <div>
@@ -110,7 +99,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
                         <div>
                             <label for="direccion">Direccion</label>
-                            <input type="text" id="direccion" th:field="*{direccion}" placeholder="Ingrese la direccion" disabled="true"/>
+                            <input type="text" id="direccion" th:field="*{direccion}" placeholder="Ingrese la direccion" disabled="true" style="width: 300px;"/>
                         </div>
 
                         <div>
@@ -143,12 +132,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     if (clienteResponse.ok) {
                         alert("El cliente con ese DNI ya existe");
                     } else {
-                        if (confirm("El campo DNI no existe ¿Desea crearlo?")) {
+                        if (confirm("El turno no existe ¿Desea crearlo?")) {
+                            document.getElementById("botonBuscar").disabled = true;
+                            document.getElementById("botonBuscar").innerHTML = "Nuevo turno";
+                            
                             document.getElementById("apellido").disabled = false;
                             document.getElementById("nombre").disabled = false;
                             document.getElementById("telefono").disabled = false;
-                            document.getElementById("centro").disabled = false;
-                            document.getElementById("companias").disabled = false;
                             document.getElementById("telefono").disabled = false;
                             document.getElementById("turno").disabled = false;
                             document.getElementById("hora").disabled = false;
