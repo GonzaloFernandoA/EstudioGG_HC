@@ -132,11 +132,6 @@
                 nombre: nombre,
                 centro: centro,
                 telefono,
-                turno,
-                hora,
-                clinica,
-                direccion,
-                sector
             };
 
             try {
@@ -183,11 +178,6 @@
                         document.getElementById("centro").value = cliente.centro || "";       
                         document.getElementById("companias").value = cliente.companias || ""; 
                         document.getElementById("telefono").value = cliente.telefono || "";
-                        document.getElementById("turno").value = cliente.turno || "";
-                        document.getElementById("hora").value = cliente.hora || "";
-                        document.getElementById("clinica").value = cliente.clinica || "";
-                        document.getElementById("direccion").value = cliente.direccion || "";
-                        document.getElementById("sector").value = cliente.sector || "";
                         
                         document.getElementById("nombre").disabled = false;
                         document.getElementById("apellido").disabled = false;
@@ -195,11 +185,6 @@
                         document.getElementById("companias").disabled = false;
                         document.getElementById("dni").disabled = true;
                         document.getElementById("telefono").disabled = false;
-                        document.getElementById("turno").disabled = false;
-                        document.getElementById("hora").disabled = false;
-                        document.getElementById("clinica").disabled = true;
-                        document.getElementById("direccion").disabled = false;
-                        document.getElementById("sector").disabled = false;
                         
                         const submitButton = document.getElementById("submitButton");
                         submitButton.textContent = "Actualizar";
@@ -302,26 +287,7 @@
                     <input type="text" id="companias" th:field="*{companias}" placeholder="Ingrese Compañias" 
                            style="width: 300px; height: 40px; font-size: 16px; padding: 8px;" />
                 </div>
-                <div>
-                    <label for="turno">Turno:</label>
-                    <input type="date" id="turno" onblur="verificarFechaAlGuardar" th:field="*{turno}" placeholder="Ingrese el Turno"/>
-                </div>
-                <div>
-                    <label for="hora">Hora:</label>
-                    <input type="text" id="hora" th:field="*{hora}" placeholder="Ingrese la hora"/>
-                </div>
-                <div>
-                    <label for="clinica">Clinica:</label>
-                    <input type="text" id="clinica" th:field="*{clinica}" placeholder="Ingrese la clinica"/>
-                </div>
-                <div>
-                    <label for="direccion">Direccion</label>
-                    <input type="text" id="direccion" th:field="*{direccion}" placeholder="Ingrese la direccion"/>
-                </div>
-                <div>
-                    <label for="sector">Sector:</label>
-                    <input type="text" id="sector" th:field="*{sector}" placeholder="Ingrese el sector o especialidad"/>
-                </div>
+                
                 <div>
                     <button type="submit" onclick="" id="submitButton" >Guardar</button>
                 </div>
@@ -357,33 +323,5 @@
         <a href="/">
             <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Home" class="home-icon" title="Volver a Inicio">
         </a>
-        
-        <script>
-            
-            
-            const verificarFechaAlGuardar = () => {
-                const fechaDeHoy = new Date();
-                fechaDeHoy.setHours(0, 0, 0, 0);
-                const fechaDeTurno = new Date(document.getElementById("turno").value);
-        
-                if (document.getElementById("turno").value && (fechaDeTurno < fechaDeHoy)) {
-                    alert("El turno no puede estar en una fecha pasada");
-                    document.getElementById("submitButton").disabled = true;
-                } else {
-                    document.getElementById("submitButton").disabled = false;
-                }
-            }
-            
-            const fechaDeTurno = document.getElementById("turno");
-            turno.addEventListener('blur', verificarFechaAlGuardar);
-            
-            const boton = document.getElementById("submitButton");
-            boton.addEventListener('click', (e) => {
-               verificarFechaAlGuardar();
-               if(boton.disabled) {
-                   e.preventDefault();
-               }
-            });
-        </script>
     </body>
 </html>
