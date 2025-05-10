@@ -11,7 +11,8 @@ application.yml
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-.gradle/
+.gradle/**
+build/**
 
 # Package Files #
 *.jar

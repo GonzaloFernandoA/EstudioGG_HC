@@ -45,11 +45,7 @@ public class ClienteController {
         return "clientes/formulario";
     }
     
-    @GetMapping("/turnos")
-    public String buscarRapido(Model model) {
-        model.addAttribute("cliente", new Cliente());
-        return "clientes/turnos";
-    }
+
 
     @GetMapping("/listado")
     public String listar(Model model) {
