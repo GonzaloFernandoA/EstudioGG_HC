@@ -54,12 +54,6 @@ public class ClienteController {
         model.addAttribute("clientes", clientes);
         return "clientes/listado";
     }
-    
-    @PostMapping("/guardarTurno")
-    public String guardarTurno(@ModelAttribute Cliente cliente) {
-        _service.guardar(cliente);
-        return "redirect:/clientes/turnos";
-    }
 
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute Cliente cliente) {
