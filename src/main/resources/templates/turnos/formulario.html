@@ -54,13 +54,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             }
         </style>
     </head>
+
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-mid-6">
+                <div class="col-md-6">
                     <h1>Registrar Turno</h1>
-
-                    <form th:action="@{/turnos/guardar}" th:object="${turno}" method="post">
+                    <form th:action="@{/turnos/guardarTurno}" th:object="${turno}" method="post">
                         <div>
                             <label>DNI: </label>
                             <input type="text" id="dni" th:field="*{dni}" placeholder="Ingrese el DNI" required/>
@@ -83,8 +83,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </div>
 
                         <div>
-                            <label for="turno">Turno:</label>
-                            <input type="date" id="dia" onblur="verificarFechaAlGuardar()" th:field="*{dia}" placeholder="Ingrese el día" disabled="true"/>
+                            <label for="fecha">Dia:</label>
+                            <input type="date" id="dia" onblur="verificarFechaAlGuardar()" th:field="*{dia}" placeholder="Ingrese el Dia" disabled="true"/>
                         </div>
 
                         <div>
@@ -118,6 +118,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </div>
             </div>
         </div>
+
         <a href="/">
             <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Home" class="home-icon" title="Volver a Inicio">
         </a>
@@ -127,59 +128,71 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 const dni = document.getElementById("dni").value;
 
                 try {
+                    const turnoResponse = await fetch(`/turnos/buscarTurno?dni=${dni}`);
                     const clienteResponse = await fetch(`/clientes/buscar?dni=${dni}`);
 
-                    if (clienteResponse.ok) {
-                        alert("El cliente con ese DNI ya existe");
+                    if (!clienteResponse.ok) {
+                        alert("El cliente con este DNI no existe");
                     } else {
-                        if (confirm("El cliente no existe ¿Desea crearlo?")) {
-                            document.getElementById("botonBuscar").disabled = true;
-                            document.getElementById("botonBuscar").innerHTML = "Nuevo turno";
-                            
-                            document.getElementById("apellido").disabled = false;
-                            document.getElementById("nombre").disabled = false;
-                            document.getElementById("telefono").disabled = false;
-                            document.getElementById("dia").disabled = false;
-                            document.getElementById("hora").disabled = false;
-                            document.getElementById("clinica").disabled = false;
-                            document.getElementById("direccion").disabled = false;
-                            document.getElementById("sector").disabled = false;
-                            document.getElementById("submitButton").disabled = false;
+                        console.log(clienteResponse);
+                        if (turnoResponse.ok) {
+                            alert("El turno con este DNI ya existe");
+                        } else {
+                            if (confirm("El turno con este DNI no existe ¿Desea crearlo?")) {
+                                document.getElementById("botonBuscar").disabled = true;
+                                document.getElementById("botonBuscar").innerHTML = "Nuevo turno";
+
+                                document.getElementById("apellido").disabled = false;
+                                document.getElementById("apellido").disabled = false;
+                                
+                                document.getElementById("nombre").disabled = false;
+                                document.getElementById("telefono").disabled = false;
+                                document.getElementById("telefono").disabled = false;
+                                document.getElementById("dia").disabled = false;
+                                document.getElementById("hora").disabled = false;
+                                document.getElementById("clinica").disabled = false;
+                                document.getElementById("direccion").disabled = false;
+                                document.getElementById("sector").disabled = false;
+                                document.getElementById("submitButton").disabled = false;
+                            }
                         }
                     }
+
+
                 } catch (error) {
-                    console.error("Error al consultar el backend:", error);
+                    console.log("Error al consultar el backend: ", error);
                 }
             }
-            
+
             const verificarFechaAlGuardar = () => {
                 const fechaDeHoy = new Date();
                 fechaDeHoy.setHours(0, 0, 0, 0);
-                const fechaDeTurno = new Date(document.getElementById("turno").value);
+                const fecha = new Date(document.getElementById("dia").value);
 
-                if (document.getElementById("turno").value && (fechaDeTurno < fechaDeHoy)) {
+                if (document.getElementById("fecha").value && (fecha < fechaDeHoy)) {
                     alert("El turno no puede estar en una fecha pasada");
                     document.getElementById("submitButton").disabled = true;
                 } else {
                     document.getElementById("submitButton").disabled = false;
                 }
             }
-            
-            const fechaDeTurno = document.getElementById("turno");
-            turno.addEventListener('blur', verificarFechaAlGuardar);
-            
+
+            const fechaDeTurno = document.getElementById("dia");
+            fechaDeTurno.addEventListener('blur', verificarFechaAlGuardar);
+
             const boton = document.getElementById("submitButton");
             boton.addEventListener('click', (e) => {
-               verificarFechaAlGuardar();
-               if(boton.disabled) {
-                   e.preventDefault();
-               }
+                verificarFechaAlGuardar();
+
+                if (boton.disabled) {
+                    e.preventDefault();
+                }
             });
-            
+
             const limpiarFormulario = () => {
                 window.location.reload();
             }
-
         </script>
+
     </body>
 </html>

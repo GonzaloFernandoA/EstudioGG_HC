@@ -1,10 +1,14 @@
 <!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Listado de Clientes</title>
    <script>
         function descargarExcel() {
-            fetch('/clientes/excel', {
+            fetch('/turnos/excel', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/octet-stream'
@@ -21,7 +25,7 @@
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'clientes.xlsx'; // Nombre del archivo
+                a.download = 'turnos.xlsx'; // Nombre del archivo
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -36,7 +40,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script>
-            $(document).ready(function () {
+        $(document).ready(function () {
                 $('#listado').DataTable({
                     language: {
                         "decimal": ",",
@@ -66,7 +70,7 @@
                     }
                 });
             });
-        </script>
+    </script>
     <style>
         table {
             width: 100%;
@@ -92,17 +96,21 @@
         <thead>
             <tr>
                 <th>DNI</th>
-                <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Compania</th>
+                <th>Nombre</th>
+                <th>Fecha y Hora</th>
+                <th>Clinica(s)</th>
+                <th>Sector</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="cliente : ${clientes}">
-                <td th:text="${cliente.dni}">DNI</td>
-                <td th:text="${cliente.nombre}">Nombre</td>
-                <td th:text="${cliente.apellido}">Apellido</td>
-                <td th:text="${cliente.companias}">Compania</td>
+            <tr th:each="turno : ${turnos}">
+                <td th:text="${turno.dni}">DNI</td>
+                <td th:text="${turno.apellido}">Apellido</td>
+                <td th:text="${turno.nombre}">Nombre</td>
+                <td th:text="${turno.dia} + ' ' + ${turno.hora}">Dia Y Hora</td>
+                <td th:text="${turno.clinica}">Clinica</td>
+                <td th:text="${turno.sector}">Sector</td>
             </tr>
         </tbody>
     </table>
@@ -111,3 +119,4 @@
         </a>
 </body>
 </html>
+

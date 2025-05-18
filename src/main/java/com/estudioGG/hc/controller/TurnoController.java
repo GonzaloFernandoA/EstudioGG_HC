@@ -37,6 +37,14 @@ public class TurnoController {
         model.addAttribute("turno", _service.nuevo());
         return "turnos/formulario";
     }
+
+    @GetMapping("/listado")
+    public String listar(Model model) {
+        List<Turno> turnos = _service.obtenerTodos();
+        
+        model.addAttribute("turnos", turnos);
+        return "turnos/listado";
+    }
     
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute Turno turno) {
