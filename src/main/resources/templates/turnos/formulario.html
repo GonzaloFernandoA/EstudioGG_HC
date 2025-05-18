@@ -139,15 +139,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             alert("El turno con este DNI ya existe");
                         } else {
                             if (confirm("El turno con este DNI no existe ¿Desea crearlo?")) {
+                                const cliente = await clienteResponse.json();
+                                
                                 document.getElementById("botonBuscar").disabled = true;
                                 document.getElementById("botonBuscar").innerHTML = "Nuevo turno";
 
                                 document.getElementById("apellido").disabled = false;
-                                document.getElementById("apellido").disabled = false;
+                                document.getElementById("apellido").value = cliente.apellido || "";
                                 
                                 document.getElementById("nombre").disabled = false;
+                                document.getElementById("nombre").value = cliente.nombre || "";
+                                
                                 document.getElementById("telefono").disabled = false;
-                                document.getElementById("telefono").disabled = false;
+                                document.getElementById("telefono").value = cliente.telefono || "";
+                                
                                 document.getElementById("dia").disabled = false;
                                 document.getElementById("hora").disabled = false;
                                 document.getElementById("clinica").disabled = false;
