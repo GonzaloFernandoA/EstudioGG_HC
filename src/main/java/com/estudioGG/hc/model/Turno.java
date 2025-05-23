@@ -20,6 +20,10 @@ public class Turno extends Jasonable implements Identifiable  {
     private String apellido;
     private String nombre;
     
+    private String recordaTresDias;
+    private String recordaUnDia;
+    private String confirmacion;
+    
     private Cliente cliente = new Cliente();
     
     /**
@@ -31,7 +35,7 @@ public class Turno extends Jasonable implements Identifiable  {
         
     }
     
-    public Turno(String dni, String telefono, String dia, String hora, String clinica, String direccion, String sector) {
+    public Turno(String dni, String telefono, String dia, String hora, String clinica, String direccion, String sector, String recordaTresDias, String recordaUnDia, String confirmacion) {
         this.dni = dni;
         this.telefono = telefono;
         this.dia = dia;
@@ -39,6 +43,10 @@ public class Turno extends Jasonable implements Identifiable  {
         this.clinica = clinica;
         this.direccion = direccion;
         this.sector = sector;
+        
+        this.recordaTresDias = recordaTresDias;
+        this.recordaUnDia = recordaUnDia;
+        this.confirmacion = confirmacion;
     }
 
     public String getNombre()
@@ -172,5 +180,29 @@ public class Turno extends Jasonable implements Identifiable  {
      */
     public void setApellido(String apellido) {
         this.apellido = apellido;
+    }
+    
+    public String getRecordaTresDias() {
+        return this.recordaTresDias;
+    }
+    
+    public void setRecordaTresDias(String recordaTresDias) {
+        this.recordaTresDias = recordaTresDias;
+    }
+    
+    public String getRecordaUnDia() {
+        return this.recordaUnDia;
+    }
+    
+    public void setRecordaUnDia(String recordaUnDia) {
+        this.recordaUnDia = recordaUnDia;
+    }
+    
+    public String getConfirmacion() {
+        return confirmacion;
+    }
+    
+    public void setConfirmacion(String confirmacion) {
+        this.confirmacion = confirmacion;
     }
 }
