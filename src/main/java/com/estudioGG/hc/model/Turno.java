@@ -35,7 +35,7 @@ public class Turno extends Jasonable implements Identifiable  {
         
     }
     
-    public Turno(String dni, String telefono, String dia, String hora, String clinica, String direccion, String sector, String recordaTresDias, String recordaUnDia, String confirmacion) {
+    public Turno(String dni, String telefono, String dia, String hora, String clinica, String direccion, String sector) {
         this.dni = dni;
         this.telefono = telefono;
         this.dia = dia;
@@ -43,10 +43,6 @@ public class Turno extends Jasonable implements Identifiable  {
         this.clinica = clinica;
         this.direccion = direccion;
         this.sector = sector;
-        
-        this.recordaTresDias = recordaTresDias;
-        this.recordaUnDia = recordaUnDia;
-        this.confirmacion = confirmacion;
     }
 
     public String getNombre()
