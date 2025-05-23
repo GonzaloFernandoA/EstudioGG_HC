@@ -101,6 +101,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <th>Fecha y Hora</th>
                 <th>Clinica(s)</th>
                 <th>Sector</th>
+                <th>R3</th>
+                <th>R1</th>
+                <th>C</th>
             </tr>
         </thead>
         <tbody>
@@ -111,6 +114,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <td th:text="${turno.dia} + ' ' + ${turno.hora}">Dia Y Hora</td>
                 <td th:text="${turno.clinica}">Clinica</td>
                 <td th:text="${turno.sector}">Sector</td>
+                <td th:text="${turno.recordaTresDias == null ? '' : (#strings.toLowerCase(turno.recordaTresDias) == 'ok' ? '✅' : '📞')}">R3</td>
+                <td th:text="${turno.recordaUnDia == null ? '' : (#strings.toLowerCase(turno.recordaUnDia) == 'ok' ? '✅' : '📞')}">R1</td>
+                <td th:text="${turno.confirmacion == null ? '' : (#strings.toLowerCase(turno.confirmacion) == 'ok' ? '✅' : '📞')}">C</td>
             </tr>
         </tbody>
     </table>
