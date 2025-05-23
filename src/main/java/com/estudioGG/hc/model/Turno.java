@@ -20,6 +20,10 @@ public class Turno extends Jasonable implements Identifiable  {
     private String apellido;
     private String nombre;
     
+    private String recordaTresDias;
+    private String recordaUnDia;
+    private String confirmacion;
+    
     private Cliente cliente = new Cliente();
     
     /**
@@ -172,5 +176,29 @@ public class Turno extends Jasonable implements Identifiable  {
      */
     public void setApellido(String apellido) {
         this.apellido = apellido;
+    }
+    
+    public String getRecordaTresDias() {
+        return this.recordaTresDias;
+    }
+    
+    public void setRecordaTresDias(String recordaTresDias) {
+        this.recordaTresDias = recordaTresDias;
+    }
+    
+    public String getRecordaUnDia() {
+        return this.recordaUnDia;
+    }
+    
+    public void setRecordaUnDia(String recordaUnDia) {
+        this.recordaUnDia = recordaUnDia;
+    }
+    
+    public String getConfirmacion() {
+        return confirmacion;
+    }
+    
+    public void setConfirmacion(String confirmacion) {
+        this.confirmacion = confirmacion;
     }
 }
