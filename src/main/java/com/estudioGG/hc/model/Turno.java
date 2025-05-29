@@ -55,12 +55,7 @@ public class Turno extends Jasonable implements Identifiable  {
         this.nombre = nombre; 
     }
     
-    public String getAppellido()
-    {
-        return cliente.getApellido();
-    }
 
-    
     @Override
     public String getId() {
         return dni; // Usamos el código como identificador

@@ -54,7 +54,7 @@ public class S3RepositoryImpl<T extends Identifiable> {
                     .bucket(getBucketName())
                     .key(file)
                     .build();
-            s3Client.putObject(putRequest, RequestBody.fromInputStream(inputStream, json.length()));
+            s3Client.putObject(putRequest, RequestBody.fromInputStream(inputStream, json.length() +1 ));
         } catch (JsonProcessingException ex) {
             logger.error(ex.getMessage());
         }

@@ -84,12 +84,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
                         <div>
                             <label for="fecha">Dia:</label>
-                            <input type="date" id="dia" onblur="verificarFechaAlGuardar()" th:field="*{dia}" placeholder="Ingrese el Dia" disabled="true"/>
+                            <input type="date" id="dia" onblur="verificarFechaAlGuardar()" th:field="*{dia}" placeholder="Ingrese el Dia" disabled="true" required/>
                         </div>
 
                         <div>
                             <label for="hora">Hora:</label>
-                            <input type="time" id="hora" th:field="*{hora}" placeholder="Ingrese la hora" disabled="true"/>
+                            <input type="time" id="hora" th:field="*{hora}" placeholder="Ingrese la hora" disabled="true" required/>
                         </div>
 
                         <div>
