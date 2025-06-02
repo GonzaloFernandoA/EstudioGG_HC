@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <div id="sidebar" th:fragment="menuLateral">
+        <h3>Menú</h3>
+        
+        <a th:href="@{/}">Inicio</a>
+        <a th:href="@{/clientes/formulario}">Clientes</a>
+        <a th:href="@{/clientes/listado}">Listar Clientes</a>
+        <a th:href="@{/historia-clinica/nuevo}">Historias Clínicas</a>
+        <a th:href="@{/demanda/nuevo}">Demandas</a>
+        <a th:href="@{/estudiosperito/nuevo}">Estudios Perito</a>
+        <a th:href="@{/pericia/nuevo}">Pericia</a>
+        <a th:href="@{/turnos/nuevo}">Turnos</a>
+        <a th:href="@{/turnos/listado}">Listar Turnos</a>
+    </div>
+</html>
+

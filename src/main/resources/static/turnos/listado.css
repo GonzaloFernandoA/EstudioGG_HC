@@ -1,0 +1,72 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 2 jun 2025, 12:21:37 p. m.
+    Author     : ROCAMBOLER529
+*/
+h1 {
+    margin-top: 60px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid black;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+
+#toggle-btn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1001;
+    background-color: #e0e0e0;
+    color: #444;
+    border: none;
+    font-size: 24px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #e0e0e0;
+    color: #444;
+    padding: 3rem;
+    box-sizing: border-box;
+    transition: left 0.3s ease;
+    z-index: 1000;
+}
+
+#sidebar.active {
+    left: 0;
+}
+
+#sidebar h3 {
+    margin-top: 20px;
+}
+
+#sidebar a {
+    display: block;
+    margin-top: 15px;
+    color: #444;
+    text-decoration: none;
+}
+
+#sidebar a:hover {
+    color: #000;
+}
