@@ -6,6 +6,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Listado de Clientes</title>
+    <link rel="stylesheet" th:href="@{/turnos/listado.css}">
    <script>
         function descargarExcel() {
             fetch('/turnos/excel', {
@@ -72,24 +73,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             });
     </script>
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
+        
     </style>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
 </head>
 <body>
+    <button id="toggle-btn">☰</button>
+    <div th:insert ="menuLateral :: menuLateral"></div>
+    
     <h1>Listado de Clientes</h1>
 
     <table id="listado">
@@ -123,6 +114,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               <a href="/">
             <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Home" class="home-icon" title="Volver a Inicio">
         </a>
+    <script>
+        const btn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        
+        btn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>
 
