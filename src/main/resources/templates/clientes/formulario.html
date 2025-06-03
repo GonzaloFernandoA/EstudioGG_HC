@@ -2,326 +2,83 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Formulario de Cliente</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-    .contenedor {
-        width: 65%;
-        margin: auto;
-        display: flex;
-        justify-content: center;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-        
-            .spinner {
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #3498db;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-        display: inline-block;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        50% { transform: rotate(180deg); }
-        100% { transform: rotate(360deg); }
-    }
-        .container {
-            margin-top: 20px;
-        }
-        .col-md-6 {
-            padding: 10px;
-        }
-        .table {
-            margin-top: 20px;
-        }
-    </style>
-    <script>
-            
-        let contador = 1; // Para numerar las filas
-        
-        const botonDeGuardar = document.getElementById("submitButton");
-        console.log(botonDeGuardar);
-
-        function agregarRegistro() {
-            // Obtener el valor del input
-            let texto = document.getElementById("inputTexto").value.trim();
-
-            // Verificar que el input no esté vacío
-            if (texto === "") {
-                alert("Por favor, ingresa una compañia.");
-                return;
-            }
-
-            // Obtener la tabla y crear una nueva fila
-            let tabla = document.getElementById("tablaDatos").getElementsByTagName('tbody')[0];
-            let nuevaFila = document.createElement("tr");
-
-            // Crear celdas
-            let celdaNumero = document.createElement("td");
-            let celdaTexto = document.createElement("td");
-            let celdaBoton = document.createElement("td");
-
-            // Asignar valores
-            celdaNumero.innerText = contador++; // Número autoincremental
-            celdaTexto.innerText = texto; // Texto ingresado
-
-            // Crear botón de eliminar
-            let botonEliminar = document.createElement("button");
-            botonEliminar.innerText = "Eliminar";
-            botonEliminar.className = "btnEliminar";
-            botonEliminar.onclick = function() {
-                eliminarRegistro(nuevaFila);
-            };
-
-            // Agregar botón a la celda de acción
-            celdaBoton.appendChild(botonEliminar);
-
-            nuevaFila.appendChild(celdaNumero);
-            nuevaFila.appendChild(celdaTexto);
-            nuevaFila.appendChild(celdaBoton);
-
-            // Agregar fila a la tabla
-            tabla.appendChild(nuevaFila);
-
-            // Limpiar el input
-            document.getElementById("inputTexto").value = "";
-        }
-           
-         function agregarCompaniasCliente(companias) {
-            let tabla = document.getElementById("tablaDatos").getElementsByTagName('tbody')[0];
-
-            companias.forEach(compania => {
-                let nuevaFila = document.createElement("tr");
-
-                let celdaNumero = document.createElement("td");
-                let celdaTexto = document.createElement("td");
-                let celdaBoton = document.createElement("td");
-
-                celdaNumero.innerText = contador++; // Número autoincremental
-                celdaTexto.innerText = compania; // Nombre de la compañía
-
-                // No se agrega botón de eliminar a las compañías
-
-                nuevaFila.appendChild(celdaNumero);
-                nuevaFila.appendChild(celdaTexto);
-                nuevaFila.appendChild(celdaBoton);
-                tabla.appendChild(nuevaFila);
-            });
-        }
-    
-    
-            async function actualizarCliente() {
-            const dni = document.getElementById("dni").value;
-            const apellido = document.getElementById("apellido").value;
-            const nombre = document.getElementById("nombre").value;
-            const centro = document.getElementById("centro").value;
-            if (!dni) {
-                alert("Debe buscar un cliente antes de actualizar.");
-                return;
-            }
-
-            const cliente = {
-                dni: dni,
-                apellido: apellido,
-                nombre: nombre,
-                centro: centro,
-                telefono,
-            };
-
-            try {
-                const response = await fetch('/clientes/actualizar', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(cliente)
-                });
-
-                if (response.ok) {
-                    alert("Cliente actualizado correctamente.");
-                } else {
-                    alert("Error al actualizar el cliente.");
-                }
-            } catch (error) {
-                console.error("Error al realizar la solicitud PUT:", error);
-                alert("Error al actualizar el cliente.");
-            }
-           }
-
-            
-            function limpiarFormulario() {
-            window.location.reload();
-            }
-            
-            async function verificarDni() {
-                const dni = document.getElementById("dni").value;
-                const loadingIndicator = document.getElementById("loadingIndicator");
-                if (!dni) {
-                    alert("Por favor, ingrese un DNI válido.");
-                    return;
-                }
-
-                try {
-                     loadingIndicator.style.display = "inline";
-                    // Consultar al backend para obtener el cliente
-                    const clienteResponse = await fetch(`/clientes/buscar?dni=${dni}`);
-                    if (clienteResponse.ok) {
-                        const cliente = await clienteResponse.json();
-                        document.getElementById("nombre").value = cliente.nombre || "";
-                        document.getElementById("apellido").value = cliente.apellido || "";
-                        document.getElementById("centro").value = cliente.centro || "";       
-                        document.getElementById("companias").value = cliente.companias || ""; 
-                        document.getElementById("telefono").value = cliente.telefono || "";
-                        
-                        document.getElementById("nombre").disabled = false;
-                        document.getElementById("apellido").disabled = false;
-                        document.getElementById("centro").disabled = false;
-                        document.getElementById("companias").disabled = false;
-                        document.getElementById("dni").disabled = true;
-                        document.getElementById("telefono").disabled = false;
-                        
-                        const submitButton = document.getElementById("submitButton");
-                        submitButton.textContent = "Actualizar";
-                        
-                    } else {
-                        alert("Cliente no encontrado.");
-                        return;
-                    }
-
-                    // Consultar al backend para obtener las historias clínicas
-                    const historyResponse = await fetch(`/history/${dni}`);
-                    const processes = await historyResponse.json();
-
-                    console.info(processes);
-
-                    // Mostrar procesos
-                    // Obtener el cuerpo de la tabla
-                    const processTableBody = document.querySelector("#processTable tbody");
-
-                    // Limpiar la tabla por si hay datos previos
-                    processTableBody.innerHTML = "";
-
-                    // Procesar cada proceso y sus elementos
-                    processes.forEach((process, index) => {
-                    const row = document.createElement("tr");
-                    
-                   
-                    
-                    const lesionesContent = process.lesiones && process.lesiones.length > 0
-                        ? process.lesiones.join("<br>") // Une los elementos con <br> entre ellos
-                        : "Sin lesiones"; // Texto predeterminado si no hay lesiones
-
-                    const lesionesContentD = process.lesionesD && process.lesionesD.length > 0
-                        ? process.lesionesD.join("<br>") // Une los elementos con <br> entre ellos
-                        : "Sin lesiones"; // Texto predeterminado si no hay lesiones
-                        
-                    const lesionesContentE = process.lesionesE && process.lesionesE.length > 0
-                        ? process.lesionesE.join("<br>") // Une los elementos con <br> entre ellos
-                        : "Sin lesiones"; // Texto predeterminado si no hay lesiones
-                        
-                    const lesionesContentP = process.lesionesP && process.lesionesP.length > 0
-                        ? process.lesionesP.join("<br>") // Une los elementos con <br> entre ellos
-                        : "Sin lesiones"; // Texto predeterminado si no hay lesiones
-
-
-                        row.innerHTML = `<td>${process.historia ? process.historia.fecha : "" }</td>
-                        <td>${process.historia && process.historia.fechaCarga ? lesionesContent : "" }</td>
-                        <td>${process.demanda && process.demanda.fechaCarga ? lesionesContentD : "" }</td>
-                        <td>${process.estudios && process.estudios.fechaCarga ? lesionesContentE : ""}</td>
-                        <td>${process.pericia && process.pericia.fechaCarga ? lesionesContentP : ""}</td>  `;
-                
-                        processTableBody.appendChild(row);
-                     });
-                     }
-                catch (error) {
-                    console.error("Error al consultar el backend:", error);
-                } finally {
-        // Ocultar el indicador de carga
-               loadingIndicator.style.display = "none";
-               }
-            }       
-            
-            
-        </script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" th:href="@{/clientes/formulario.css}">
     </head>
     <body>
-        
-        
-<div class="container">
-    <div class="row">
-        <!-- Panel Izquierdo: Información del Cliente -->
-        <div class="col-md-6">
-            <h1>Registrar Cliente</h1>
-            <form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
-                <div>
-                    <label for="dni">DNI:</label>
-                    <input type="text" id="dni" th:field="*{dni}" placeholder="Ingrese el DNI" required />
-                    <button type="button" onclick="verificarDni()">Buscar</button>
-                    <div id="loadingIndicator" class="spinner" style="display: none;"></div>
-                </div>
-                <div>
-                    <label for="apellido">Apellido:</label>
-                    <input type="text" id="apellido" th:field="*{apellido}" placeholder="Ingrese el apellido" required  />
-                </div>
-                <div>
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" th:field="*{nombre}" placeholder="Ingrese el nombre"  />
-                </div>
-                <div>
-                    <label for="telefono">Telefono:</label>
-                    <input type="number" id="telefono" th:field="*{telefono}" placeholder="Ingrese el telefono"/>
-                </div>
-                <div>
-                    <label for="centro">Medico:</label>
-                    <input type="text" id="centro" th:field="*{centro}" placeholder="Ingrese Centro Medico"  />
-                </div>
-                
-                <div>
-                    <label for="compania">Companias Seguro:</label>
-                    <input type="text" id="companias" th:field="*{companias}" placeholder="Ingrese Compañias" 
-                           style="width: 300px; height: 40px; font-size: 16px; padding: 8px;" />
-                </div>
-                
-                <div>
-                    <button type="submit" onclick="" id="submitButton" >Guardar</button>
-                </div>
-                <div>
-                    <button type="button" onclick="limpiarFormulario()">Limpiar</button>
-                </div>
-            </form>
-        </div>
 
-        <!-- Panel Derecho: Lista de Procesos -->
-        <div class="col-12">
-            <div id="processList" >
-                <h3>Procesos:</h3>
-                <table id="processTable" class="table table-bordered" >
-                    <thead>
-                        <tr>
-                            <th style="width: 200px;">Fecha Accidente</th>
-                            <th style="width: 200px;">Hist. C</th>
-                            <th style="width: 200px;">Demanda</th>
-                            <th style="width: 200px;">Estudio</th>
-                            <th style="width: 200px;">Pericia</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Las filas se generarán dinámicamente -->
-                    </tbody>
-                </table>
+
+        <div class="container">
+            <div class="row">
+                <!-- Panel Izquierdo: Información del Cliente -->
+                <div class="col-md-6">
+                    <h1>Registrar Cliente</h1>
+                    <form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
+                        <div>
+                            <label for="dni">DNI:</label>
+                            <input type="text" id="dni" th:field="*{dni}" placeholder="Ingrese el DNI" required />
+                            <button type="button" onclick="verificarDni()">Buscar</button>
+                            <div id="loadingIndicator" class="spinner" style="display: none;"></div>
+                        </div>
+                        <div>
+                            <label for="apellido">Apellido:</label>
+                            <input type="text" id="apellido" th:field="*{apellido}" placeholder="Ingrese el apellido" required  />
+                        </div>
+                        <div>
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" th:field="*{nombre}" placeholder="Ingrese el nombre"  />
+                        </div>
+                        <div>
+                            <label for="telefono">Telefono:</label>
+                            <input type="number" id="telefono" th:field="*{telefono}" placeholder="Ingrese el telefono"/>
+                        </div>
+                        <div>
+                            <label for="centro">Medico:</label>
+                            <input type="text" id="centro" th:field="*{centro}" placeholder="Ingrese Centro Medico"  />
+                        </div>
+
+                        <div>
+                            <label for="compania">Companias Seguro:</label>
+                            <input type="text" id="companias" th:field="*{companias}" placeholder="Ingrese Compañias" 
+                                   style="width: 300px; height: 40px; font-size: 16px; padding: 8px;" />
+                        </div>
+
+                        <div>
+                            <button type="submit" onclick="" id="submitButton" >Guardar</button>
+                        </div>
+                        <div>
+                            <button type="button" onclick="limpiarFormulario()">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Panel Derecho: Lista de Procesos -->
+                <div class="col-12">
+                    <div id="processList" >
+                        <h3>Procesos:</h3>
+                        <table id="processTable" class="table table-bordered" >
+                            <thead>
+                                <tr>
+                                    <th style="width: 200px;">Fecha Accidente</th>
+                                    <th style="width: 200px;">Hist. C</th>
+                                    <th style="width: 200px;">Demanda</th>
+                                    <th style="width: 200px;">Estudio</th>
+                                    <th style="width: 200px;">Pericia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Las filas se generarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
         <a href="/">
             <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Home" class="home-icon" title="Volver a Inicio">
         </a>
+        
+        <script th:src="@{/clientes/formulario.js}"></script>
     </body>
 </html>
