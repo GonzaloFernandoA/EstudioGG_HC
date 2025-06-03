@@ -1,117 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Formulario de Historia Clínica</title>
-    <script>
-        
-         document.addEventListener("DOMContentLoaded", () => {
-                const alerta = document.getElementById('alerta');
-                const texto = document.querySelector('#alerta span').textContent;
-                
-                if (alerta) {
-                    if (texto == "Guardado OK") {
-                        alerta.style.backgroundColor = '#95df95';
-                    }
-                    
-                    setTimeout(() => {
-                        let opacidad = 1;
-                        const efectoDeDesvanecimiento = setInterval(() => {
-                            if (opacidad <= 0) {
-                                clearInterval(efectoDeDesvanecimiento);
-                                alerta.style.display = "none";
-                            } else {
-                                opacidad -= 0.1;
-                                alerta.style.opacity = opacidad;
-                            }
-                        }, 100);
-                        
-                    }, 3000);
-                }
-            });
-        
-        function agregarRegistro() {
-            // Obtener el contenedor de registros
-            const registrosContainer = document.getElementById('registrosContainer');
+    <head>
+        <title>Formulario de Historia Clínica</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" th:href="@{/historia-clinica/formulario.css}">
+    </head>
+    <body>
+        <h1>Formulario de Historia Clínica</h1>
+        <form th:action="@{/historia-clinica}" th:object="${historiaClinica}" method="post">
 
-            // Crear un nuevo div para el registro
-            const registroDiv = document.createElement('div');
-            registroDiv.className = 'registro';
+            <label for="dni">DNI:</label>
+            <input type="text" id="dni" th:field="*{dni}" required/>
 
-            // Crear el campo Código Parte
-            const labelCodigoParte = document.createElement('label');
-            labelCodigoParte.innerText = 'Código Parte:';
-            registroDiv.appendChild(labelCodigoParte);
+            <label for="fecha">Fecha Accidente:</label>
+            <input type="date" id="fecha" th:field="*{fecha}" required/>
 
-            const selectCodigoParte = document.createElement('select');
-            selectCodigoParte.name = `registros[${registrosContainer.dataset.index}].codigoParteCuerpo`;
-            selectCodigoParte.required = true;
-            selectCodigoParte.innerHTML = document.getElementById('comboParteTemplate').innerHTML;
-            registroDiv.appendChild(selectCodigoParte);
-
-            // Crear el campo Código Ubicación
-            const labelCodigoUbicacion = document.createElement('label');
-            labelCodigoUbicacion.innerText = 'Código Ubicación:';
-            registroDiv.appendChild(labelCodigoUbicacion);
-
-            const selectCodigoUbicacion = document.createElement('select');
-            selectCodigoUbicacion.name = `registros[${registrosContainer.dataset.index}].codigoUbicacion`;
-            selectCodigoUbicacion.required = true;
-            selectCodigoUbicacion.innerHTML = document.getElementById('comboUbicacionTemplate').innerHTML;
-            registroDiv.appendChild(selectCodigoUbicacion);
-
-            // Crear el botón de eliminar
-            const eliminarButton = document.createElement('button');
-            eliminarButton.type = 'button';
-            eliminarButton.innerText = 'Eliminar Registro';
-            eliminarButton.onclick = function () {
-                registrosContainer.removeChild(registroDiv);
-            };
-            registroDiv.appendChild(eliminarButton);
-
-            // Agregar el registro al contenedor
-            registrosContainer.appendChild(registroDiv);
-
-            // Incrementar el índice de registros
-            registrosContainer.dataset.index = parseInt(registrosContainer.dataset.index) + 1;
-        }
-    </script>
-</head>
-<body>
-    <h1>Formulario de Historia Clínica</h1>
-    <form th:action="@{/historia-clinica}" th:object="${historiaClinica}" method="post">
-
-        <label for="dni">DNI:</label>
-        <input type="text" id="dni" th:field="*{dni}" required/>
-
-        <label for="fecha">Fecha Accidente:</label>
-        <input type="date" id="fecha" th:field="*{fecha}" required/>
-
-        <div>
-            <h3>Registros</h3>
-            <button type="button" onclick="agregarRegistro()">Añadir Registro</button>
-            <div id="registrosContainer" data-index="0">
-                <!-- Registros dinámicos se añadirán aquí -->
+            <div>
+                <h3>Registros</h3>
+                <button type="button" onclick="agregarRegistro()">Añadir Registro</button>
+                <div id="registrosContainer" data-index="0">
+                    <!-- Registros dinámicos se añadirán aquí -->
+                </div>
             </div>
-        </div>
 
-        <button type="submit">Guardar</button>
-    </form>
+            <button type="submit">Guardar</button>
+        </form>
 
-    <!-- Template para opciones de Código Parte -->
-    <template id="comboParteTemplate">
-        <option th:each="opcion : ${opcionesParte}" th:value="${opcion.codigo}" th:text="${opcion.descripcion}"></option>
-    </template>
+        <!-- Template para opciones de Código Parte -->
+        <template id="comboParteTemplate">
+            <option th:each="opcion : ${opcionesParte}" th:value="${opcion.codigo}" th:text="${opcion.descripcion}"></option>
+        </template>
 
-    <!-- Template para opciones de Código Ubicación -->
-    <template id="comboUbicacionTemplate">
-        <option th:each="opcion : ${opcionesUbicacion}" th:value="${opcion.codigo}" th:text="${opcion.descripcion}"></option>
-    </template>
-          <a href="/">
+        <!-- Template para opciones de Código Ubicación -->
+        <template id="comboUbicacionTemplate">
+            <option th:each="opcion : ${opcionesUbicacion}" th:value="${opcion.codigo}" th:text="${opcion.descripcion}"></option>
+        </template>
+        <a href="/">
             <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Home" class="home-icon" title="Volver a Inicio">
         </a>
-    
-    <div th:if="${error}" class="alert alert-danger">
-    <p th:text="${error}"></p>
-</div>
-</body>
+
+        <div th:if="${error}" class="alert alert-danger">
+            <p th:text="${error}"></p>
+        </div>
+        
+        <script th:src="@{/historia-clinica/formulario.js}"></script>
+    </body>
 </html>
