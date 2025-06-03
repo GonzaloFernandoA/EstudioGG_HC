@@ -1,128 +1,49 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Listado de Clientes</title>
-   <script>
-        function descargarExcel() {
-            fetch('/turnos/excel', {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/octet-stream'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al generar el archivo Excel');
-                }
-                return response.blob(); // Convertir la respuesta a Blob
-            })
-            .then(blob => {
-                // Crear un enlace de descarga
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'turnos.xlsx'; // Nombre del archivo
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url); // Limpiar memoria
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Hubo un problema al descargar el archivo.');
-            });
-        }
-    </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-                $('#listado').DataTable({
-                    language: {
-                        "decimal": ",",
-                        "thousands": ".",
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ registros",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún dato disponible en esta tabla",
-                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix": "",
-                        "sSearch": "Buscar:",
-                        "sUrl": "",
-                        "sInfoThousands": ",",
-                        "sLoadingRecords": "Cargando...",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                        }
-                    }
-                });
-            });
-    </script>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
-</head>
-<body>
-    <h1>Listado de Clientes</h1>
 
-    <table id="listado">
-        <thead>
-            <tr>
-                <th>DNI</th>
-                <th>Apellido</th>
-                <th>Nombre</th>
-                <th>Fecha y Hora</th>
-                <th>Clinica(s)</th>
-                <th>Sector</th>
-                <th>R3</th>
-                <th>R1</th>
-                <th>C</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="turno : ${turnos}">
-                <td th:text="${turno.dni}">DNI</td>
-                <td th:text="${turno.apellido}">Apellido</td>
-                <td th:text="${turno.nombre}">Nombre</td>
-                <td th:text="${turno.dia} + ' ' + ${turno.hora}">Dia Y Hora</td>
-                <td th:text="${turno.clinica}">Clinica</td>
-                <td th:text="${turno.sector}">Sector</td>
-                <td th:text="${turno.recordaTresDias == null ? '' : (#strings.toLowerCase(turno.recordaTresDias) == 'ok' ? '✅' : '📞')}">R3</td>
-                <td th:text="${turno.recordaUnDia == null ? '' : (#strings.toLowerCase(turno.recordaUnDia) == 'ok' ? '✅' : '📞')}">R1</td>
-                <td th:text="${turno.confirmacion == null ? '' : (#strings.toLowerCase(turno.confirmacion) == 'ok' ? '✅' : '📞')}">C</td>
-            </tr>
-        </tbody>
-    </table>
-              <a href="/">
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Listado de Clientes</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
+        <link rel="stylesheet" th:href="@{/turnos/listado.css}">
+    </head>
+    <body>
+        <h1>Listado de Clientes</h1>
+
+        <table id="listado">
+            <thead>
+                <tr>
+                    <th>DNI</th>
+                    <th>Apellido</th>
+                    <th>Nombre</th>
+                    <th>Fecha y Hora</th>
+                    <th>Clinica(s)</th>
+                    <th>Sector</th>
+                    <th>R3</th>
+                    <th>R1</th>
+                    <th>C</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="turno : ${turnos}">
+                    <td th:text="${turno.dni}">DNI</td>
+                    <td th:text="${turno.apellido}">Apellido</td>
+                    <td th:text="${turno.nombre}">Nombre</td>
+                    <td th:text="${turno.dia} + ' ' + ${turno.hora}">Dia Y Hora</td>
+                    <td th:text="${turno.clinica}">Clinica</td>
+                    <td th:text="${turno.sector}">Sector</td>
+                    <td th:text="${turno.recordaTresDias == null ? '' : (#strings.toLowerCase(turno.recordaTresDias) == 'ok' ? '✅' : '📞')}">R3</td>
+                    <td th:text="${turno.recordaUnDia == null ? '' : (#strings.toLowerCase(turno.recordaUnDia) == 'ok' ? '✅' : '📞')}">R1</td>
+                    <td th:text="${turno.confirmacion == null ? '' : (#strings.toLowerCase(turno.confirmacion) == 'ok' ? '✅' : '📞')}">C</td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="/">
             <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Home" class="home-icon" title="Volver a Inicio">
         </a>
-</body>
+
+        <script th:src="@{/turnos/listado.js}"></script>
+    </body>
 </html>
 
