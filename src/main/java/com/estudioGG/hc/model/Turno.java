@@ -19,7 +19,8 @@ public class Turno extends Jasonable implements Identifiable  {
     private String sector;
     private String apellido;
     private String nombre;
-    
+
+    private String alta;
     private String recordaTresDias;
     private String recordaUnDia;
     private String confirmacion;
@@ -178,7 +179,12 @@ public class Turno extends Jasonable implements Identifiable  {
     }
     
     public void setRecordaTresDias(String recordaTresDias) {
-        this.recordaTresDias = recordaTresDias;
+
+            if ("Voy a ir".equals(recordaTresDias) )
+                this.recordaTresDias = "OK";
+            else
+                this.recordaTresDias = recordaTresDias;
+
     }
     
     public String getRecordaUnDia() {
@@ -186,14 +192,32 @@ public class Turno extends Jasonable implements Identifiable  {
     }
     
     public void setRecordaUnDia(String recordaUnDia) {
-        this.recordaUnDia = recordaUnDia;
+        if ("Voy a ir".equals(recordaUnDia) )
+            this.recordaUnDia = "OK";
+        else
+            this.recordaUnDia = recordaUnDia;
     }
     
     public String getConfirmacion() {
         return confirmacion;
     }
     
-    public void setConfirmacion(String confirmacion) {
-        this.confirmacion = confirmacion;
+    public void setConfirmacion(String confirmacion)
+    {
+        if ("Pude concurrir !!!".equals(confirmacion) )
+            this.confirmacion = "OK";
+        else
+            this.confirmacion = confirmacion;
+    }
+
+    public String getAlta() {
+        return alta;
+    }
+
+    public void setAlta(String alta) {
+        if ("Voy a ir".equals(alta) )
+            this.alta = "OK";
+        else
+            this.alta = alta;
     }
 }

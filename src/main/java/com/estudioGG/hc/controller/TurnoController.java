@@ -11,14 +11,14 @@ import com.estudioGG.hc.service.ClienteService;
 import com.estudioGG.hc.service.HistoryService;
 import com.estudioGG.hc.service.TurnoService;
 import java.util.List;
+import java.util.Map;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -46,7 +46,22 @@ public class TurnoController {
         model.addAttribute("turnos", turnos);
         return "turnos/listado";
     }
-    
+
+    @DeleteMapping("/eliminar")
+    public ResponseEntity<Void> eliminarTurno(@RequestBody Map<String, String> payload) {
+        logger.info("Eliminando turno por DNI: {}", payload.get("dni"));
+        String dni = payload.get("dni");
+        // Call your service to delete the record by DNI
+        boolean eliminado = _service.eliminarPorDni(dni);
+        if (eliminado) {
+            logger.info("Turno con DNI {} eliminado correctamente", dni);
+            return ResponseEntity.ok().build();
+        } else {
+            logger.warn("No se encontró un turno con DNI {}", dni);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute Turno turno) {
         logger.info("Guardando entidad...:" + turno.toJson());

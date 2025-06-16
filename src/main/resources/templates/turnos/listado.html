@@ -5,7 +5,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 -->
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Listado de Clientes</title>
+    <title>Listado de Turnos Asignados</title>
    <script>
         function descargarExcel() {
             fetch('/turnos/excel', {
@@ -41,35 +41,70 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-                $('#listado').DataTable({
-                    language: {
-                        "decimal": ",",
-                        "thousands": ".",
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ registros",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún dato disponible en esta tabla",
-                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                        "sInfoPostFix": "",
-                        "sSearch": "Buscar:",
-                        "sUrl": "",
-                        "sInfoThousands": ",",
-                        "sLoadingRecords": "Cargando...",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
-                        },
-                        "oAria": {
-                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                        }
+            $('#listado').DataTable({
+                language: {
+                    "decimal": ",",
+                    "thousands": ".",
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                     }
-                });
+                }
             });
+
+            // Delegación de eventos para los botones de eliminar (debe estar dentro de ready)
+            $('#listado').on('click', '.btn-eliminar-turno', function () {
+                const dni = $(this).data('dni');
+                const nombreApellido = $(this).data('nombre-apellido');
+                confirmarEliminarTurno(dni, nombreApellido);
+            });
+        });
+
+        function eliminarTurno(dni) {
+            fetch('/turnos/eliminar', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ dni: dni })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Turno eliminado correctamente');
+                    window.location.reload();
+                } else {
+                    alert('Error al eliminar el turno');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar el turno');
+            });
+        }
+
+        function confirmarEliminarTurno(dni, nombreApellido) {
+            if (confirm('¿Desea eliminar el turno de ' + nombreApellido + ' ?')) {
+                eliminarTurno(dni);
+            }
+        }
     </script>
     <style>
         table {
@@ -90,33 +125,42 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
 </head>
 <body>
-    <h1>Listado de Clientes</h1>
+    <h1>Listado de Turnos Asignados</h1>
 
     <table id="listado">
         <thead>
             <tr>
-                <th>DNI</th>
-                <th>Apellido</th>
-                <th>Nombre</th>
+                <th>Teléfono</th>
+                <!-- <th>DNI</th> -->
+                <th>Apellido y Nombre </th>
                 <th>Fecha y Hora</th>
                 <th>Clinica(s)</th>
                 <th>Sector</th>
-                <th>R3</th>
-                <th>R1</th>
-                <th>C</th>
+                <th>Aviso de turno</th>
+                <th>Tres días antes</th>
+                <th>Día anterior</th>
+                <th>Confirmación</th>
+                <th>Eliminar</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="turno : ${turnos}">
-                <td th:text="${turno.dni}">DNI</td>
-                <td th:text="${turno.apellido}">Apellido</td>
-                <td th:text="${turno.nombre}">Nombre</td>
+                <td th:text="${turno.telefono}">Teléfono</td>
+                <!-- <td th:text="${turno.dni}">DNI</td> -->
+                <td th:text="${turno.apellido} + ' ' + ${turno.nombre}">Apellido y Nombre</td>
                 <td th:text="${turno.dia} + ' ' + ${turno.hora}">Dia Y Hora</td>
                 <td th:text="${turno.clinica}">Clinica</td>
                 <td th:text="${turno.sector}">Sector</td>
-                <td th:text="${turno.recordaTresDias == null ? '' : (#strings.toLowerCase(turno.recordaTresDias) == 'ok' ? '✅' : '📞')}">R3</td>
-                <td th:text="${turno.recordaUnDia == null ? '' : (#strings.toLowerCase(turno.recordaUnDia) == 'ok' ? '✅' : '📞')}">R1</td>
-                <td th:text="${turno.confirmacion == null ? '' : (#strings.toLowerCase(turno.confirmacion) == 'ok' ? '✅' : '📞')}">C</td>
+                <td th:title="${turno.alta}"            th:text="${turno.alta            == null ? '' : (#strings.toLowerCase(turno.alta)            == 'ok' ? '✅' : '📞')}">Alta</td>
+                <td th:title="${turno.recordaTresDias}" th:text="${turno.recordaTresDias == null ? '' : (#strings.toLowerCase(turno.recordaTresDias) == 'ok' ? '✅' : '📞')}">R3</td>
+                <td th:title="${turno.recordaUnDia}"    th:text="${turno.recordaUnDia    == null ? '' : (#strings.toLowerCase(turno.recordaUnDia)    == 'ok' ? '✅' : '📞')}">R1</td>
+                <td th:title="${turno.confirmacion}"    th:text="${turno.confirmacion    == null ? '' : (#strings.toLowerCase(turno.confirmacion)    == 'ok' ? '✅' : '📞')}">C</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-eliminar-turno"
+                        th:attr="data-dni=${turno.dni},data-nombre-apellido=${turno.apellido + ' ' + turno.nombre}">
+                        X
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -125,4 +169,3 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         </a>
 </body>
 </html>
-

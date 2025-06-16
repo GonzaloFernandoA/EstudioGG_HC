@@ -15,6 +15,7 @@ import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,23 +42,30 @@ public class S3RepositoryImpl<T extends Identifiable> {
 
     }
 
-    public void save(String key, T entity) {
+    public void save(String key, T entity, String folderName) {
 
-        String folder = entity.getClass().getSimpleName() + "/";
-        String file = folder + entity.getId() + ".json"; 
+        String folder = folderName + "/";
+        String file = folder + entity.getId() + ".json";
         try {
             String json = objectMapper.writeValueAsString(entity);
-            logger.info("S3Repository:" + json);
-            logger.info("file  :" + file);
-            InputStream inputStream = new ByteArrayInputStream(json.getBytes());
+
+            logger.info("S3Repository bucket:{} file:{} data:{}", getBucketName(), file, json);
+
+            InputStream inputStream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
             PutObjectRequest putRequest = PutObjectRequest.builder()
                     .bucket(getBucketName())
                     .key(file)
                     .build();
-            s3Client.putObject(putRequest, RequestBody.fromInputStream(inputStream, json.length() +1 ));
+            s3Client.putObject(putRequest, RequestBody.fromInputStream(inputStream, json.length() ));
+            logger.info("File Grabado" + file);
         } catch (JsonProcessingException ex) {
             logger.error(ex.getMessage());
         }
+    }
+
+    public void save(String key, T entity) {
+        String folder = entity.getClass().getSimpleName();
+        this.save(key, entity, folder);
     }
 
     public T findByKey(String key, Class<T> clazz) {
@@ -82,7 +90,10 @@ public class S3RepositoryImpl<T extends Identifiable> {
         }
     }
 
-    public void delete(String key) {
+    public void delete(String key, Class<T> clazz) {
+        String folder = clazz.getSimpleName();
+        key= folder + "/" + key + ".json";
+        logger.info("Eliminando objeto con clave: {}", key);
         DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
                 .bucket(getBucketName())
                 .key(key)
@@ -94,8 +105,7 @@ public class S3RepositoryImpl<T extends Identifiable> {
         public List<T> findAll(Class<T> clazz) {
         String prefix = clazz.getSimpleName() + "/" ;
 
-        logger.info("BucketName: [" + getBucketName() + "]");
-        logger.info("Quiteria: {" + prefix + "}");
+        logger.info("BucketName: {} prefix {}" , getBucketName() , prefix );
 
         ListObjectsV2Request request = ListObjectsV2Request.builder()
                 .bucket(getBucketName())

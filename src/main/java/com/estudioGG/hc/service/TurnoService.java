@@ -34,14 +34,30 @@ public class TurnoService<T extends Identifiable> {
 
     public Turno nuevo()
     {
-        Turno turno = new Turno();
-
-        return turno; 
+        return new Turno();
     }
     
     public void guardar(Turno turno) {
         logger.info(turno.toJson());
-        TurnoRepository.save(turno.getId(), turno);
+        TurnoRepository.save(turno.getId(), turno, "Turno_out");
+    }
+
+    public void actualizar(Turno turno) {
+        logger.info(turno.toJson());
+        TurnoRepository.save(turno.getId(), turno );
+    }
+
+    public boolean eliminarPorDni(String dni) {
+        logger.info("Eliminando turno por DNI: {}", dni);
+        Turno turno = TurnoRepository.findByKey(dni, Turno.class);
+        if (turno != null) {
+            TurnoRepository.delete(turno.getId(), Turno.class);
+            logger.info("Turno con DNI {} eliminado", dni);
+            return true;
+        } else {
+            logger.warn("No se encontró un turno con DNI {}", dni);
+            return false;
+        }
     }
 
     public Turno obtener(String id) {
@@ -51,5 +67,38 @@ public class TurnoService<T extends Identifiable> {
     
     public List<Turno> obtenerTodos() {
         return TurnoRepository.findAll(Turno.class);
+    }
+
+    public void updateTemplate(String id, String template, String valor ) {
+        Turno turno = obtener(id);
+        logger.info("Updating template {} for turno with id {} and valor {}", template, id, valor);
+        if (turno != null) {
+            switch (template) {
+                case "altaturno"  -> {
+                    turno.setAlta(valor);
+                    logger.info("Alta template updated for turno with id {}", id);
+                    break;
+                }
+                case "recordatorio3" -> {
+                    turno.setRecordaTresDias(valor);
+                    logger.info("Recordatorio3 template updated for turno with id {}", id);
+                    break;
+                }
+                case "recordatorio1" -> {
+                    turno.setRecordaUnDia(valor);
+                    logger.info("Recordatorio1 template updated for turno with id {}", id);
+                    break;
+                }
+                case "postconfirmacion" -> {
+                    turno.setConfirmacion(valor);
+                    logger.info("Postconfirmacion template updated for turno with id {}", id);
+                    break;
+                }
+                default -> logger.warn("Unknown template: {}", template);
+            }
+            actualizar(turno);
+        } else {
+            logger.error("Turno with id {} not found", id);
+        }
     }
 }
