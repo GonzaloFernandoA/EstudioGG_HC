@@ -41,9 +41,12 @@
             margin-top: 20px;
         }
     </style>
-        <script>
+    <script>
             
-             let contador = 1; // Para numerar las filas
+        let contador = 1; // Para numerar las filas
+        
+        const botonDeGuardar = document.getElementById("submitButton");
+        console.log(botonDeGuardar);
 
         function agregarRegistro() {
             // Obtener el valor del input
@@ -127,7 +130,8 @@
                 dni: dni,
                 apellido: apellido,
                 nombre: nombre,
-                centro: centro
+                centro: centro,
+                telefono,
             };
 
             try {
@@ -172,13 +176,15 @@
                         document.getElementById("nombre").value = cliente.nombre || "";
                         document.getElementById("apellido").value = cliente.apellido || "";
                         document.getElementById("centro").value = cliente.centro || "";       
-                        document.getElementById("companias").value = cliente.companias || "";            
+                        document.getElementById("companias").value = cliente.companias || ""; 
+                        document.getElementById("telefono").value = cliente.telefono || "";
                         
                         document.getElementById("nombre").disabled = false;
                         document.getElementById("apellido").disabled = false;
                         document.getElementById("centro").disabled = false;
                         document.getElementById("companias").disabled = false;
                         document.getElementById("dni").disabled = true;
+                        document.getElementById("telefono").disabled = false;
                         
                         const submitButton = document.getElementById("submitButton");
                         submitButton.textContent = "Actualizar";
@@ -239,7 +245,9 @@
         // Ocultar el indicador de carga
                loadingIndicator.style.display = "none";
                }
-            }
+            }       
+            
+            
         </script>
     </head>
     <body>
@@ -266,6 +274,10 @@
                     <input type="text" id="nombre" th:field="*{nombre}" placeholder="Ingrese el nombre"  />
                 </div>
                 <div>
+                    <label for="telefono">Telefono:</label>
+                    <input type="number" id="telefono" th:field="*{telefono}" placeholder="Ingrese el telefono"/>
+                </div>
+                <div>
                     <label for="centro">Medico:</label>
                     <input type="text" id="centro" th:field="*{centro}" placeholder="Ingrese Centro Medico"  />
                 </div>
@@ -275,9 +287,9 @@
                     <input type="text" id="companias" th:field="*{companias}" placeholder="Ingrese Compañias" 
                            style="width: 300px; height: 40px; font-size: 16px; padding: 8px;" />
                 </div>
-
+                
                 <div>
-                    <button type="submit" id="submitButton" >Guardar</button>
+                    <button type="submit" onclick="" id="submitButton" >Guardar</button>
                 </div>
                 <div>
                     <button type="button" onclick="limpiarFormulario()">Limpiar</button>

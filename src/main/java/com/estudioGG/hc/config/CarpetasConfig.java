@@ -28,6 +28,9 @@ public class CarpetasConfig {
 
     @Value("${server.data.demanda}")
     private String demanda;
+    
+    @Value("{server.data.turno}")
+    private String turno;
 
     /**
      * @return the cliente
@@ -97,5 +100,13 @@ public class CarpetasConfig {
      */
     public void setDemanda(String demanda) {
         this.demanda = demanda;
+    }
+    
+    public String getTurno() {
+        return turno;
+    }
+    
+    public void setTurno(String turno) {
+        this.turno = turno;
     }
 }

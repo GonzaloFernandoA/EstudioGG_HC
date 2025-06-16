@@ -11,9 +11,11 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 @Configuration
 public class S3Config {
+
 
     @Value("${aws.accessKeyId}")
     private String accessKeyId;
@@ -26,7 +28,12 @@ public class S3Config {
 
     @Value("${aws.bucket}")
     private String bucket;
-    
+
+    @Bean
+    public SqsClient sqsClient() {
+        return SqsClient.create();
+    }
+
     @Bean
     public S3Client s3Cliente() {
         return S3Client.builder()

@@ -7,7 +7,6 @@ package com.estudioGG.hc.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +17,13 @@ public class Cliente implements Identifiable {
     private String nombre;
     private String centro;
     private String dni;
-    private String companias ;
+    private String companias;
+    private String telefono;
+    private String turno;
+    private String hora;
+    private String clinica;
+    private String direccion;
+    private String sector;
     
     
     @JsonIgnore
@@ -33,13 +38,19 @@ public class Cliente implements Identifiable {
     {
     }
     // Constructor
-    public Cliente(String apellido, String nombre, String companias, String dni, String centro) {
+    public Cliente(String apellido, String nombre, String telefono, String companias, String dni, String centro, String turno, String hora, String clinica, String direccion, String sector) {
         this.apellido = apellido;
         this.nombre = nombre;
         this.companias = companias;
         this.centro = centro; 
         this.dni = dni;
         this.historia = null;
+        this.telefono = telefono;
+        this.turno = turno;
+        this.hora = hora;
+        this.clinica = clinica;
+        this.direccion = direccion;
+        this.sector = sector;
     }
 
     // Getters y Setters
@@ -119,6 +130,54 @@ public class Cliente implements Identifiable {
      */
     public void setCompanias(String companias) {
         this.companias = companias;
+    }
+    
+    public String getTelefono() {
+        return telefono;
+    }
+    
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+    
+    public String getTurno() {
+        return turno;
+    }
+    
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
+    
+    public String getHora() {
+        return hora;
+    }
+    
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+    
+    public String getClinica() {
+        return clinica;
+    }
+    
+    public void setClinica(String clinica) {
+        this.clinica = clinica;
+    }
+    
+    public String getDireccion() {
+        return direccion;
+    }
+    
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+    
+    public String getSector() {
+        return sector;
+    }
+    
+    public void setSector(String sector) {
+        this.sector = sector;
     }
     
 }
