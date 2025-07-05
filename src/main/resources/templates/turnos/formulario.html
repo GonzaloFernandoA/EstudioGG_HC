@@ -5,13 +5,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- Incluye timepicker.js -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.css">
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.js"></script>
 
 
         <!-- Flatpickr -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>ript>
 
         <style>
             .contenedor {
@@ -87,7 +87,7 @@
                         </div>
 
                         <div>
-                            <label for="fecha">Dia:</label>
+                            <label for="dia">Dia:</label>
                             <input type="date" id="dia" onblur="verificarFechaAlGuardar()" th:field="*{dia}" placeholder="Ingrese el Dia" required/>
                         </div>
 
@@ -95,7 +95,6 @@
                             <label for="hora">Hora:</label>
                             <input type="time" id="hora" th:field="*{hora}" placeholder="Ingrese la hora" step="300" required/>
                         </div>
-
                         <div>
                             <label for="clinica">Clínica:</label>
                             <select id="clinica" th:field="*{clinica}" onchange="actualizarDireccionYSector()" required>
@@ -133,41 +132,48 @@
         </a>
 
         <script>
-            const verificarFechaAlGuardar = () => {
-                const fechaDeHoy = new Date();
-                fechaDeHoy.setHours(0, 0, 0, 0);
-                const fecha = new Date(document.getElementById("dia").value);
 
-                if (document.getElementById("fecha").value && (fecha < fechaDeHoy)) {
-                    alert("El turno no puede estar en una fecha pasada");
-                    document.getElementById("submitButton").disabled = true;
-                } else {
-                    document.getElementById("submitButton").disabled = false;
-                }
-            }
+            $('#hora').timepicker({
+             timeFormat: 'H:i',       // formato 24hs
+             step: 5,                 // intervalo de 5 en 5 minutos
+             scrollDefault: 'now',    // posición inicial
+             disableTextInput: true   // obliga a elegir del control
+           });
+                   const verificarFechaAlGuardar = () => {
+                       const fechaDeHoy = new Date();
+                       fechaDeHoy.setHours(0, 0, 0, 0);
+                       const fecha = new Date(document.getElementById("dia").value);
 
-            const limpiarFormulario = () => {
-                window.location.reload();
-            }
+                       if (document.getElementById("dia").value && (fecha < fechaDeHoy)) {
+                           alert("El turno no puede estar en una fecha pasada");
+                           document.getElementById("submitButton").disabled = true;
+                       } else {
+                           document.getElementById("submitButton").disabled = false;
+                       }
+                   }
 
-            function actualizarDireccionYSector() {
-                const clinicaSelect = document.getElementById("clinica");
-                const direccionInput = document.getElementById("direccion");
-                const sectorInput = document.getElementById("sector");
+                   const limpiarFormulario = () => {
+                       window.location.reload();
+                   }
 
-                const clinicaSeleccionada = clinicaSelect.value;
+                   function actualizarDireccionYSector() {
+                       const clinicaSelect = document.getElementById("clinica");
+                       const direccionInput = document.getElementById("direccion");
+                       const sectorInput = document.getElementById("sector");
 
-                if (clinicaSeleccionada === "Consultorio Dr. Schutz") {
-                    direccionInput.value = "Avenida Arias 2335 Piso 3 B, Castelar";
-                    sectorInput.value = "-";
-                } else if (clinicaSeleccionada === "Clinica Alcorta de Moreno") {
-                    direccionInput.value = "Aristobulo del Valle 2629 , Moreno";
-                    sectorInput.value = "Resonancia";
-                } else {
-                    direccionInput.value = "";
-                    sectorInput.value = "";
-                }
-            }
+                       const clinicaSeleccionada = clinicaSelect.value;
+
+                       if (clinicaSeleccionada === "Consultorio Dr. Schutz") {
+                           direccionInput.value = "Avenida Arias 2335 Piso 3 B, Castelar";
+                           sectorInput.value = "-";
+                       } else if (clinicaSeleccionada === "Clinica Alcorta de Moreno") {
+                           direccionInput.value = "Aristobulo del Valle 2629 , Moreno";
+                           sectorInput.value = "Resonancia";
+                       } else {
+                           direccionInput.value = "";
+                           sectorInput.value = "";
+                       }
+                   }
 
         </script>
 
