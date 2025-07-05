@@ -1,163 +1,181 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Página de turnos</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <title>Página de turnos</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- Incluye timepicker.js -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.css">
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.js"></script>
 
-    <!-- Flatpickr -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <style>
-        .contenedor {
-            width: 65%;
-            margin: auto;
-            display: flex;
-            justify-content: center;
-        }
+        <!-- Flatpickr -->
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        <style>
+            .contenedor {
+                width: 65%;
+                margin: auto;
+                display: flex;
+                justify-content: center;
+            }
 
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-        }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            50% { transform: rotate(180deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .container { margin-top: 20px; }
-        .col-md-6 { padding: 10px; }
-        .table { margin-top: 20px; }
-    </style>
-</head>
+            .spinner {
+                border: 4px solid #f3f3f3;
+                border-top: 4px solid #3498db;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                animation: spin 1s linear infinite;
+                display: inline-block;
+            }
 
-<body>
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <h1>Registrar Turno</h1>
-            <form th:action="@{/turnos/guardar}" th:object="${turno}" method="post">
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                50% {
+                    transform: rotate(180deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+            .container {
+                margin-top: 20px;
+            }
+            .col-md-6 {
+                padding: 10px;
+            }
+            .table {
+                margin-top: 20px;
+            }
+        </style>
+    </head>
 
-                <div>
-                    <label>DNI: </label>
-                    <input type="text" id="dni" th:field="*{dni}" placeholder="Ingrese el DNI" required/>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1>Registrar Turno</h1>
+                    <form th:action="@{/turnos/guardar}" th:object="${turno}" method="post">
+
+                        <div>
+                            <label>DNI: </label>
+                            <input type="text" id="dni" th:field="*{dni}" placeholder="Ingrese el DNI" required/>
+                        </div>
+
+                        <div>
+                            <label for="apellido">Apellido:</label>
+                            <input type="text" id="apellido" th:field="*{apellido}" placeholder="Ingrese el apellido" required/>
+                        </div>
+
+                        <div>
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" th:field="*{nombre}" placeholder="Ingrese el nombre" required />
+                        </div>
+
+                        <div>
+                            <label for="telefono">Telefono:</label>
+                            <input type="number" id="telefono" th:field="*{telefono}" placeholder="Ingrese el telefono" required/>
+                        </div>
+
+                        <div>
+                            <label for="dia">Dia:</label>
+                            <input type="date" id="dia" onblur="verificarFechaAlGuardar()" th:field="*{dia}" placeholder="Ingrese el Dia" required/>
+                        </div>
+
+                        <div>
+                            <label for="hora">Hora:</label>
+                            <input type="time" id="hora" th:field="*{hora}" placeholder="Ingrese la hora" step="300" required/>
+                        </div>
+                        <div>
+                            <label for="clinica">Clínica:</label>
+                            <select id="clinica" th:field="*{clinica}" onchange="actualizarDireccionYSector()" required>
+                                <option value="">Seleccione una clínica</option>
+                                <option value="Consultorio Dr. Schutz">Consultorio Dr. Schutz</option>
+                                <option value="Clinica Alcorta de Moreno">Clinica Alcorta de Moreno</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="direccion">Dirección</label>
+                            <input type="text" id="direccion" th:field="*{direccion}" readonly style="width: 300px;" />
+                        </div>
+
+                        <div>
+                            <label for="sector">Sector:</label>
+                            <input type="text" id="sector" th:field="*{sector}" readonly />
+                        </div>
+
+                        <div>
+                            <button type="submit" id="submitButton">Grabar</button>
+                        </div>
+
+                        <div>
+                            <button type="button" onclick="limpiarFormulario()">Limpiar</button>
+                        </div>
+
+                    </form>
                 </div>
-
-                <div>
-                    <label for="apellido">Apellido:</label>
-                    <input type="text" id="apellido" th:field="*{apellido}" placeholder="Ingrese el apellido" required/>
-                </div>
-
-                <div>
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" th:field="*{nombre}" placeholder="Ingrese el nombre" required />
-                </div>
-
-                <div>
-                    <label for="telefono">Telefono:</label>
-                    <input type="number" id="telefono" th:field="*{telefono}" placeholder="Ingrese el telefono" required/>
-                </div>
-
-                <div>
-                    <label for="fecha">Dia:</label>
-                    <input type="date" id="dia" onblur="verificarFechaAlGuardar()" th:field="*{dia}" placeholder="Ingrese el Dia" required/>
-                </div>
-
-                <div>
-                    <label for="hora">Hora:</label>
-                    <input type="time" id="hora" th:field="*{hora}" placeholder="Ingrese la hora" required/>
-
-                </div>
-
-                <div>
-                    <label for="clinica">Clínica:</label>
-                    <select id="clinica" th:field="*{clinica}" onchange="actualizarDireccionYSector()" required>
-                        <option value="">Seleccione una clínica</option>
-                        <option value="Consultorio Dr. Schutz">Consultorio Dr. Schutz</option>
-                        <option value="Clinica Alcorta de Moreno">Clinica Alcorta de Moreno</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label for="direccion">Dirección</label>
-                    <input type="text" id="direccion" th:field="*{direccion}" readonly style="width: 300px;" />
-                </div>
-
-                <div>
-                    <label for="sector">Sector:</label>
-                    <input type="text" id="sector" th:field="*{sector}" readonly />
-                </div>
-
-                <div>
-                    <button type="submit" id="submitButton">Grabar</button>
-                </div>
-
-                <div>
-                    <button type="button" onclick="limpiarFormulario()">Limpiar</button>
-                </div>
-
-            </form>
+            </div>
         </div>
-    </div>
-</div>
 
-<a href="/">
-    <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Home" class="home-icon" title="Volver a Inicio">
-</a>
+        <a href="/">
+            <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Home" class="home-icon" title="Volver a Inicio">
+        </a>
 
-<script>
-    const verificarFechaAlGuardar = () => {
-        const fechaDeHoy = new Date();
-        fechaDeHoy.setHours(0, 0, 0, 0);
-        const fecha = new Date(document.getElementById("dia").value);
+        <script>
 
-        if (document.getElementById("fecha").value && (fecha < fechaDeHoy)) {
-            alert("El turno no puede estar en una fecha pasada");
-            document.getElementById("submitButton").disabled = true;
-        } else {
-            document.getElementById("submitButton").disabled = false;
-        }
-    }
+            $('#hora').timepicker({
+             timeFormat: 'H:i',       // formato 24hs
+             step: 5,                 // intervalo de 5 en 5 minutos
+             scrollDefault: 'now',    // posición inicial
+             disableTextInput: true   // obliga a elegir del control
+           });
+                   const verificarFechaAlGuardar = () => {
+                       const fechaDeHoy = new Date();
+                       fechaDeHoy.setHours(0, 0, 0, 0);
+                       const fecha = new Date(document.getElementById("dia").value);
 
-    const limpiarFormulario = () => {
-        window.location.reload();
-    }
+                       if (document.getElementById("dia").value && (fecha < fechaDeHoy)) {
+                           alert("El turno no puede estar en una fecha pasada");
+                           document.getElementById("submitButton").disabled = true;
+                       } else {
+                           document.getElementById("submitButton").disabled = false;
+                       }
+                   }
 
-    function actualizarDireccionYSector() {
-        const clinicaSelect = document.getElementById("clinica");
-        const direccionInput = document.getElementById("direccion");
-        const sectorInput = document.getElementById("sector");
+                   const limpiarFormulario = () => {
+                       window.location.reload();
+                   }
 
-        const clinicaSeleccionada = clinicaSelect.value;
+                   function actualizarDireccionYSector() {
+                       const clinicaSelect = document.getElementById("clinica");
+                       const direccionInput = document.getElementById("direccion");
+                       const sectorInput = document.getElementById("sector");
 
-        if (clinicaSeleccionada === "Consultorio Dr. Schutz") {
-            direccionInput.value = "Avenida Arias 2335 Piso 3 B, Castelar";
-            sectorInput.value = "-";
-        } else if (clinicaSeleccionada === "Clinica Alcorta de Moreno") {
-            direccionInput.value = "Aristobulo del Valle 2629 , Moreno";
-            sectorInput.value = "Resonancia";
-        } else {
-            direccionInput.value = "";
-            sectorInput.value = "";
-        }
-    }
+                       const clinicaSeleccionada = clinicaSelect.value;
 
-</script>
+                       if (clinicaSeleccionada === "Consultorio Dr. Schutz") {
+                           direccionInput.value = "Avenida Arias 2335 Piso 3 B, Castelar";
+                           sectorInput.value = "-";
+                       } else if (clinicaSeleccionada === "Clinica Alcorta de Moreno") {
+                           direccionInput.value = "Aristobulo del Valle 2629 , Moreno";
+                           sectorInput.value = "Resonancia";
+                       } else {
+                           direccionInput.value = "";
+                           sectorInput.value = "";
+                       }
+                   }
 
-</body>
+        </script>
+
+    </body>
 </html>
