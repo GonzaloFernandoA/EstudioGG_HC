@@ -5,13 +5,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- Incluye timepicker.js -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.css">
-        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/timepicker@1.13.18/jquery.timepicker.min.js"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 
         <!-- Flatpickr -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
         <style>
             .contenedor {
@@ -87,14 +87,30 @@
                         </div>
 
                         <div>
-                            <label for="dia">Dia:</label>
+                            <label for="fecha">Dia:</label>
                             <input type="date" id="dia" onblur="verificarFechaAlGuardar()" th:field="*{dia}" placeholder="Ingrese el Dia" required/>
                         </div>
 
                         <div>
-                            <label for="hora">Hora:</label>
-                            <input type="time" id="hora" th:field="*{hora}" placeholder="Ingrese la hora" step="300" required/>
+                            <!-- <label for="hora">Hora:</label> -->
+                            <!-- <input type="time" id="hora" th:field="*{hora}" placeholder="Ingrese la hora" step="300" required/> -->
+                            
+                            <label for="hora">Elija la hora: </label>
+                            <select id="horaSelect" onchange="actualizarHora()" required="">
+                                <option value="">--</option>
+                                <th:block th:each="i : ${#numbers.sequence(0,23)}">
+                                    <option th:value="${i}" th:text="${i < 10 ? '0' + i : i}"></option>
+                                </th:block>
+                            </select>
+                            <select id="minutoSelect" onchange="actualizarHora()" required="">
+                                <option value="">--</option>
+                                <th:block th:each="m : ${#numbers.sequence(0,55,5)}">
+                                    <option th:value="${m}" th:text="${m < 10 ? '0' + m : m}"></option>
+                                </th:block>
+                            </select>
                         </div>
+                        <input type="hidden" id="hora" th:field='*{hora}' required/> <!-- Para backend -->
+
                         <div>
                             <label for="clinica">Clínica:</label>
                             <select id="clinica" th:field="*{clinica}" onchange="actualizarDireccionYSector()" required>
@@ -132,48 +148,53 @@
         </a>
 
         <script>
+            const verificarFechaAlGuardar = () => {
+                const fechaDeHoy = new Date();
+                fechaDeHoy.setHours(0, 0, 0, 0);
+                const fecha = new Date(document.getElementById("dia").value);
 
-            $('#hora').timepicker({
-             timeFormat: 'H:i',       // formato 24hs
-             step: 5,                 // intervalo de 5 en 5 minutos
-             scrollDefault: 'now',    // posición inicial
-             disableTextInput: true   // obliga a elegir del control
-           });
-                   const verificarFechaAlGuardar = () => {
-                       const fechaDeHoy = new Date();
-                       fechaDeHoy.setHours(0, 0, 0, 0);
-                       const fecha = new Date(document.getElementById("dia").value);
+                if (document.getElementById("fecha").value && (fecha < fechaDeHoy)) {
+                    alert("El turno no puede estar en una fecha pasada");
+                    document.getElementById("submitButton").disabled = true;
+                } else {
+                    document.getElementById("submitButton").disabled = false;
+                }
+            }
 
-                       if (document.getElementById("dia").value && (fecha < fechaDeHoy)) {
-                           alert("El turno no puede estar en una fecha pasada");
-                           document.getElementById("submitButton").disabled = true;
-                       } else {
-                           document.getElementById("submitButton").disabled = false;
-                       }
-                   }
+            const limpiarFormulario = () => {
+                window.location.reload();
+            }
 
-                   const limpiarFormulario = () => {
-                       window.location.reload();
-                   }
+            function actualizarDireccionYSector() {
+                const clinicaSelect = document.getElementById("clinica");
+                const direccionInput = document.getElementById("direccion");
+                const sectorInput = document.getElementById("sector");
 
-                   function actualizarDireccionYSector() {
-                       const clinicaSelect = document.getElementById("clinica");
-                       const direccionInput = document.getElementById("direccion");
-                       const sectorInput = document.getElementById("sector");
+                const clinicaSeleccionada = clinicaSelect.value;
 
-                       const clinicaSeleccionada = clinicaSelect.value;
-
-                       if (clinicaSeleccionada === "Consultorio Dr. Schutz") {
-                           direccionInput.value = "Avenida Arias 2335 Piso 3 B, Castelar";
-                           sectorInput.value = "-";
-                       } else if (clinicaSeleccionada === "Clinica Alcorta de Moreno") {
-                           direccionInput.value = "Aristobulo del Valle 2629 , Moreno";
-                           sectorInput.value = "Resonancia";
-                       } else {
-                           direccionInput.value = "";
-                           sectorInput.value = "";
-                       }
-                   }
+                if (clinicaSeleccionada === "Consultorio Dr. Schutz") {
+                    direccionInput.value = "Avenida Arias 2335 Piso 3 B, Castelar";
+                    sectorInput.value = "-";
+                } else if (clinicaSeleccionada === "Clinica Alcorta de Moreno") {
+                    direccionInput.value = "Aristobulo del Valle 2629 , Moreno";
+                    sectorInput.value = "Resonancia";
+                } else {
+                    direccionInput.value = "";
+                    sectorInput.value = "";
+                }
+            }
+            
+            const actualizarHora = () => {
+                const hora = document.getElementById("horaSelect").value;
+                const minuto = document.getElementById("minutoSelect").value;
+                const oculto = document.getElementById("hora");
+                
+                if (hora !== "" && minuto !== "") {
+                    oculto.value = `${hora.padStart(2, '0')}:${minuto.padStart(2, '0')}`;
+                } else {
+                    oculto.value = "";
+                }
+            }
 
         </script>
 
